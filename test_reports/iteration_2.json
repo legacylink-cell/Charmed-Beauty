@@ -1,0 +1,21 @@
+{
+  "summary": "Frontend retest of Charmed Beauty 9 & 18 landing page after iteration_1 fixes plus new menu category-tab feature. All 5 acceptance items PASS. (1) /images/team.webp returns HTTP 200 and img[data-testid=team-photo] renders with naturalWidth=487, naturalHeight=510 after lazy-load into view. (2) Mobile 390x844: document.scrollWidth=390 == innerWidth=390 (no horizontal overflow). Header shows only 'Book' on <sm and only 'Book Online' at >=640px. (3) Menu category tabs: 4 cards with role=tab, aria-controls=menu-panel; clicking each swaps panel data-testid=menu-group-{id} and item counts exactly match (cuts=8, color=13, treatments=3, occasion=1). All 25 book links in the visible panels point at https://charmedbeauty918.glossgenius.com/booking-flow with target=_blank and rel containing noopener. Keyboard: Tab moves focus between tabs, Enter and Space both activate a tab (aria-selected flips to true). (4) Regression: gallery has 21 tiles + 5 filter buttons, lightbox open/prev/next/close all work. 11 total GlossGenius booking anchors on the page — all valid URL/target/rel. Email links present on location, final CTA and footer (all mailto:Charmedbeautynj@gmail.com). Google Map iframe visible. No OWNER badge on the 4 stylist cards. Zero console errors. (5) Mobile menu grid: the 4 category cards render 2-per-row (row 0 top == row 1 top), rows show name/note/time/price/Book cleanly. Nothing overflows the 390px viewport.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "App.js is now ~995 lines. Strongly recommend splitting Header/Hero/Manifesto/Marquee/Gallery/Menu/Reviews/Artists/ServiceArea/Location/FinalCTA/Footer into /src/components/* and pulling MENU/WORK/TOWNS/TEAM_PHONES/REVIEWS/HOURS into /src/data/* for maintainability.",
+    "Menu tabs are keyboard-activatable via Enter/Space (default <button> behavior) but do not implement full WAI-ARIA tab pattern (ArrowRight/ArrowLeft navigation between tabs, roving tabindex). Optional a11y polish, not a blocker."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a", "frontend": "100% (5/5 acceptance items pass)"},
+  "seed_data_creation": "None (static site).",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Both iteration_1 defects are confirmed fixed. New menu category-tab feature is fully wired: 4 tabs (menu-tab-cuts/color/treatments/occasion), single panel #menu-panel with data-testid=menu-group-{selectedId}, items only rendered for the selected group with counts 8/13/3/1. All book links inside the panel use the correct GlossGenius URL, target=_blank, rel=noopener noreferrer. Note: team-photo uses loading=lazy so tests must scroll it into view before asserting naturalWidth."
+}
