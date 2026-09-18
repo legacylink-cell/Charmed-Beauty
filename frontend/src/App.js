@@ -244,7 +244,7 @@ const Hero = () => (
     id="hero"
     data-testid="hero-section"
     aria-labelledby="hero-headline"
-    className="relative overflow-hidden pt-10 pb-16 md:py-40 px-6 border-b border-[#2E2E36] md:min-h-[92vh] flex items-start md:items-center"
+    className="relative overflow-hidden pt-8 pb-16 md:py-40 px-6 border-b border-[#2E2E36] md:min-h-[92vh] flex items-start md:items-center"
   >
     <div className="hero-grid" aria-hidden="true"></div>
     <div className="hero-scan" aria-hidden="true"></div>

@@ -1,0 +1,27 @@
+{
+  "summary": "Verified hero mobile dead-space fix and stricter floating BOOK NOW visibility rule on the Charmed Beauty 9 & 18 landing page. Tested at 390x844, 430x932 and 1440x900. All three review-request criteria pass: (1) hero content is top-aligned on mobile with tagline sitting 40px under the sticky header, headline fully in viewport, kicker text on ONE line inside its bordered pill; (2) floating-book-btn is hidden while #hero is in viewport, visible after scrolling past hero (menu/gallery/gift cards region), and hidden again when #contact + footer intersect (verified via computed .float-wrap className/visibility/opacity); (3) desktop 1440x900 still shows full-height editorial hero with HD background image on right, no horizontal overflow, map info bar below embed, menu tabs / work filters / gallery lightbox all functional.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Hero mobile (390/430)", "issues": ["Gap between sticky header bottom and hero-tagline top is exactly 40px (pt-10). Spec worded as 'less than 40px' — boundary case. Visually tight and matches the intent of the fix, but if strictly < 40 is required, reduce hero top padding to pt-8 (32px)."]}
+    ]
+  },
+  "console_warnings": ["React warning: Invalid DOM property `fetchpriority` — should be camelCase `fetchPriority` on the <img> preload/eager hero image. Non-blocking but should be renamed."],
+  "test_report_links": [],
+  "action_items": [
+    "(Optional/nit) Reduce hero mobile top padding from pt-10 to pt-8 so gap is strictly <40px per spec wording.",
+    "Rename `fetchpriority` prop to `fetchPriority` (camelCase) on the hero <img> to silence the React DOM property warning."
+  ],
+  "critical_code_review_comments": [
+    "FloatingBook IntersectionObserver correctly watches #hero, #contact and footer with threshold 0.01 — visibility toggles as expected.",
+    "App.js is ~1138 lines — approaching the 700-line guideline; consider splitting Hero, Menu, Gallery, Reviews, Contact, FloatingBook into separate component files for maintainability."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A (skipped)", "frontend": "100%"},
+  "seed_data_creation": "None",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Static landing page, no backend. Preview: https://lash-nails-studio.preview.emergentagent.com. Key testids: hero-section, hero-tagline, hero-headline, floating-book-btn, final-cta-section (#contact), map-link, google-map-embed, menu-tab-*, work-filter-*, work-tile-*. IntersectionObserver for FloatingBook uses threshold 0.01; note that scrollIntoView({block:'center'}) on #contact will not centre it if #contact is near the bottom of the document — verify float-CTA hidden state by scrolling to document end (scrollTo(0, body.scrollHeight)) rather than centering #contact."
+}

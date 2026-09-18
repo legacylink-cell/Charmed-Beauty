@@ -53,6 +53,13 @@ Luxury beauty salon website for Charmed Beauty 9 & 18 (woman-owned studio, Toms 
 - Hero background: crisp copper hairline grid (masked fade), animated copper scan line, a single HD editorial hair image on the right edge (Unsplash photo-1546704972, desaturated + masked to black; the owner's own photos were too low-res for hero use), outlined "9&18" stroke watermark (xl+), and the kicker restyled as a bordered pill with a pulsing dot. Hidden below md. All motion respects prefers-reduced-motion.
 - Gift card CTAs now use Joanne's line: (732) 330-4850 for both call and pre-filled text; copy updated to "arranged directly with Joanne".
 
+### 2026-09-18 (mobile bug fixes)
+- Location map: address card + "Open in Maps" moved out of the map overlay into a bar below the iframe (no more overlap on phones).
+- Floating BOOK NOW: now driven by an IntersectionObserver — hidden while the hero, final CTA or footer is in view, so it never covers hero copy or footer links. Safe-area aware, smaller on mobile.
+- Gift card CTAs stack full width on mobile, row at >=640px.
+- Hero mobile spacing: pt-8 + top-aligned (desktop keeps min-h-92vh centred); kicker pill fits on one line at 390px.
+- Verified by testing agent: iteration_3.json and iteration_4.json — 100%, no open issues.
+
 ## Testing- /app/test_reports/iteration_1.json — 9/11 pass; 2 defects (team.webp 404, 13px mobile header overflow) → both fixed
 - /app/test_reports/iteration_2.json — **100% (5/5)**: team photo, zero mobile overflow, menu tabs (8/13/3/1), 11 booking CTAs, gallery + lightbox, email links, map, no console errors
 
