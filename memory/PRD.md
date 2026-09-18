@@ -43,6 +43,7 @@ Luxury beauty salon website for Charmed Beauty 9 & 18 (woman-owned studio, Toms 
 - Added "04 / The Artists" section with real team photo (/images/team.png) + 4 stylist call/text cards
 - Footer: "Designed by Mo Studio" → https://mozeid.com/ (marketing credit, per user)
 - Facebook wired: https://www.facebook.com/charmedbeautynj
+- Google proof added: 5.0 rating / 54 Google reviews block in Standards, links to Google listing. Instagram removed per user ("no IG for now"). No auth on site.
 
 ## Backlog
 - P1: Wire real Instagram/Facebook URLs once provided

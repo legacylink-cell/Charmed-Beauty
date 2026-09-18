@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import "@/App.css";
-import { Phone, MessageSquare, Instagram, Facebook, MapPin, ArrowUpRight } from "lucide-react";
+import { Phone, MessageSquare, Facebook, MapPin, ArrowUpRight, Star } from "lucide-react";
 
 const BOOKING_URL = "https://charmedbeauty918.glossgenius.com";
 const PHONE_DISPLAY = "(732) 955-9096";
@@ -8,6 +8,8 @@ const PHONE_TEL = "tel:+17329559096";
 const PHONE_SMS = "sms:+17329559096";
 const MAPS_URL =
   "https://www.google.com/maps/search/?api=1&query=1201+Hooper+Ave+Sola+Salon+Studios+Toms+River+NJ+08753";
+const GOOGLE_REVIEWS_URL =
+  "https://www.google.com/maps/search/?api=1&query=Charmed+Beauty+9+%26+18+Toms+River+NJ+08753";
 
 const SERVICES = [
   {
@@ -381,11 +383,32 @@ const Standards = () => (
             <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#D4A373]">03 / Studio Verification</span>
             <h2 className="font-manifesto text-4xl sm:text-5xl uppercase text-white mt-2">Verified Client Reviews</h2>
           </div>
-          <div data-testid="review-count" className="text-left md:text-right">
-            <div className="font-manifesto text-6xl md:text-7xl text-[#D4A373] leading-none">675</div>
-            <div className="text-xs font-mono uppercase tracking-widest text-[#8E8E98] mt-1">
-              Reviews on GlossGenius
+          <div className="flex gap-10 md:gap-16">
+            <div data-testid="review-count" className="text-left md:text-right">
+              <div className="font-manifesto text-6xl md:text-7xl text-[#D4A373] leading-none">675</div>
+              <div className="text-xs font-mono uppercase tracking-widest text-[#8E8E98] mt-1">
+                GlossGenius Reviews
+              </div>
             </div>
+            <a
+              data-testid="google-rating"
+              href={GOOGLE_REVIEWS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-left md:text-right group"
+            >
+              <div className="font-manifesto text-6xl md:text-7xl text-white leading-none group-hover:text-[#D4A373] transition-colors">
+                5.0
+              </div>
+              <div className="flex md:justify-end gap-1 mt-1" aria-label="5 out of 5 stars">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} size={12} className="text-[#C9A227]" fill="currentColor" />
+                ))}
+              </div>
+              <div className="text-xs font-mono uppercase tracking-widest text-[#8E8E98] mt-1 group-hover:text-white transition-colors">
+                54 Google Reviews
+              </div>
+            </a>
           </div>
         </div>
       </Reveal>
@@ -498,15 +521,7 @@ const Location = () => (
               </a>
             </div>
 
-            <div className="pt-4 border-t border-[#25252B] flex items-center space-x-6">
-              <span
-                data-testid="instagram-placeholder"
-                className="flex items-center space-x-2 text-xs font-mono uppercase text-[#8E8E98]"
-                title="Instagram link coming soon"
-              >
-                <Instagram size={14} className="text-[#D4A373]" />
-                <span>Instagram — link coming soon</span>
-              </span>
+            <div className="pt-4 border-t border-[#25252B]">
               <a
                 data-testid="facebook-link"
                 href="https://www.facebook.com/charmedbeautynj"
