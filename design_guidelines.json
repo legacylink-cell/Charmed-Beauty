@@ -1,0 +1,149 @@
+{
+  "typography": {
+    "fonts": {
+      "headings": "Impact, 'Arial Black', sans-serif-condensed, sans-serif",
+      "accent": "'Playfair Display', Georgia, serif",
+      "body": "sans-serif",
+      "mono": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
+    },
+    "hierarchy": {
+      "h1": "text-5xl sm:text-7xl md:text-8xl lg:text-9xl uppercase tracking-tighter leading-[0.9]",
+      "h2_manifesto": "text-4xl sm:text-6xl uppercase",
+      "h2_small": "text-xl font-bold uppercase tracking-wide",
+      "h3": "text-2xl font-bold uppercase",
+      "body": "text-base md:text-lg font-light leading-relaxed",
+      "mono_accent": "text-xs font-mono uppercase tracking-[0.2em] to tracking-[0.3em]"
+    }
+  },
+  "colors": {
+    "background": "#0E0E10",
+    "surface": "#18181C",
+    "surface_light": "#25252B",
+    "surface_dark": "#080809",
+    "text_primary": "#ECECEC",
+    "text_white": "#FFFFFF",
+    "text_muted": "#8E8E98",
+    "accent_primary": "#D4A373",
+    "accent_secondary": "#C9A227",
+    "gradients": {
+      "frame": "bg-gradient-to-r from-[#18181C] via-[#2D2218] to-[#0E0E10]",
+      "map": "bg-gradient-to-br from-[#18181C] via-[#231A12] to-[#0E0E10]"
+    }
+  },
+  "visual_enhancers": {
+    "borders": "1px solid #25252B or #D4A373 for active elements",
+    "selection": "bg-[#C9A227] text-black",
+    "effects": "backdrop-blur-md for overlay panels",
+    "shadows": "shadow-2xl for main CTA"
+  },
+  "grids_and_layouts": {
+    "container": "max-w-7xl mx-auto px-6",
+    "sections": "py-24 md:py-32 border-b border-[#25252B]",
+    "matrix": "grid-cols-1 md:grid-cols-12 gap-6 or gap-8",
+    "manifesto_device": "grid-cols-1 md:grid-cols-3 gap-12 with top borders"
+  },
+  "motion": {
+    "transitions": "hover:bg-[#D4A373] transition-colors, hover:text-white transition-colors"
+  },
+  "accessibility": {
+    "contrast": "High contrast white/accent text on dark backgrounds",
+    "testing": "All interactive elements MUST include data-testid attribute"
+  },
+  "image_urls": [
+    {
+      "category": "studio-craft",
+      "description": "intense precision work showing technician hand-sculpting sharp stiletto chrome nail apex under clean spotlight",
+      "url": "https://images.unsplash.com/photo-1632345031435-8727f6897d53?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NjV8MHwxfHNlYXJjaHwxfHxtYW5pY3VyZSUyMHByZWNpc2lvbiUyMG5haWwlMjBhcnR8ZW58MHx8fHwxNzg5NzQzMTA4fDA&ixlib=rb-4.1.0&q=85"
+    }
+  ],
+  "build_manifest": {
+    "direction": {
+      "app_type": "beauty-personal",
+      "ambition": "A3",
+      "mode": "dark",
+      "rail": "booking",
+      "readiness": "rich",
+      "spine": "CLINIC",
+      "name": "Studio 09 and 18 Vanguard",
+      "tone": "Monolithic Modern",
+      "archetype": "brutalist-luxury-vanguard",
+      "axes": {
+        "layout": "left-rail",
+        "hero": "type-only",
+        "tone_register": "provocative-modern",
+        "proof": "numbers-forward",
+        "motion": "entrance-only",
+        "colour": "carbon-black+burnished-copper",
+        "type_pairing": "sans-display+sans-body"
+      }
+    },
+    "tone_tokens": {
+      "fonts": {
+        "heading": "Impact, 'Arial Black', sans-serif-condensed, sans-serif",
+        "body": "sans-serif",
+        "mono": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
+      },
+      "colors": {
+        "charcoal_950": "#080809",
+        "charcoal_900": "#0E0E10",
+        "charcoal_800": "#18181C",
+        "charcoal_700": "#25252B",
+        "raw_copper": "#D4A373",
+        "burnished_gold": "#C9A227",
+        "slate_muted": "#8E8E98"
+      },
+      "spacing": "py-24, px-6, gap-12, gap-8",
+      "border_radius": "none / 0px (sharp edges only)",
+      "shadows": "shadow-2xl for primary CTA"
+    },
+    "conversion_wiring": {
+      "action": "booking",
+      "url": "https://charmedbeauty918.glossgenius.com",
+      "locations": [
+        "Header 'Direct Booking' button",
+        "Hero 'Book on GlossGenius' button",
+        "Offerings section 'Book' buttons",
+        "Contact section 'Open glossgenius calendar' button"
+      ]
+    },
+    "content_slots": [
+      {
+        "slot": "brand-name",
+        "text": "Charmed Beauty 9 & 18",
+        "source": "brief"
+      },
+      {
+        "slot": "differentiator",
+        "text": "We engineer nail extensions and custom lash maps that nobody else in town can duplicate. Built with high-adhesion Japanese gels and weightless Russian volume fans that maintain perfection for weeks.",
+        "source": "brief"
+      },
+      {
+        "slot": "review-1",
+        "text": "\"The retention on my gel extensions is unlike anything I've had. Four full weeks without a single chip or lift. Charmed Beauty is hands down the best in Toms River.\"",
+        "source": "placeholder"
+      },
+      {
+        "slot": "review-2",
+        "text": "\"She mapped out my lashes perfectly to suit my hooded eyes. No heavy glue feel, super lightweight, and they lasted through my entire beach vacation.\"",
+        "source": "placeholder"
+      },
+      {
+        "slot": "address",
+        "text": "Toms River, NJ, United States, New Jersey 08753",
+        "source": "brief"
+      }
+    ],
+    "fabrication_guardrails": [
+      "Do NOT add statistics, ratings, review counts, awards, or certifications.",
+      "Do NOT add founding or copyright years.",
+      "Do NOT add press mentions, named clients, or any testimonials other than the provided placeholders.",
+      "Do NOT add facts or details not present in the approved direction file."
+    ],
+    "locale": {
+      "language": "en-US",
+      "currency": "USD"
+    }
+  },
+  "instructions_to_main_agent": "/app/design/direction.html is the visual source of truth. These guidelines transcribe it and add real images. On any conflict, the direction file wins. Ensure that the booking links point to https://charmedbeauty918.glossgenius.com as requested in the conversion wiring.",
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": "Do not center align the app container. Apply transitions selectively. Build with exactly the HTML elements, classes, layout, and content values present in the direction.html file. Maintain the sharp aesthetic without rounding corners unless specified. Use React icons or lucide-react if strictly required, but mostly rely on the typographic and css aesthetic provided."
+}
