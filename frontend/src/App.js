@@ -705,25 +705,25 @@ const GiftCards = () => (
           ))}
         </ul>
 
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3">
           <a
             data-testid="gift-text-btn"
             href={`${GIFT_SMS}?body=Hi%20Charmed%20Beauty%20—%20I%27d%20like%20to%20buy%20a%20gift%20card.`}
-            className="px-8 py-4 bg-[#D4A373] text-black text-xs font-mono uppercase tracking-[0.2em] hover:bg-white transition-colors flex items-center gap-2"
+            className="w-full sm:w-auto px-8 py-4 bg-[#D4A373] text-black text-xs font-mono uppercase tracking-[0.2em] hover:bg-white transition-colors flex items-center justify-center gap-2"
           >
             <MessageSquare size={14} aria-hidden="true" /> Text To Buy
           </a>
           <a
             data-testid="gift-call-btn"
             href={GIFT_TEL}
-            className="px-8 py-4 border border-[#D4A373] text-[#D4A373] text-xs font-mono uppercase tracking-[0.2em] hover:bg-[#D4A373] hover:text-black transition-colors flex items-center gap-2"
+            className="w-full sm:w-auto px-8 py-4 border border-[#D4A373] text-[#D4A373] text-xs font-mono uppercase tracking-[0.2em] hover:bg-[#D4A373] hover:text-black transition-colors flex items-center justify-center gap-2"
           >
             <Phone size={14} aria-hidden="true" /> {GIFT_PHONE_DISPLAY}
           </a>
           <a
             data-testid="gift-email-btn"
             href={`${EMAIL_HREF}?subject=Gift%20Card%20Request`}
-            className="px-8 py-4 border border-[#2E2E36] text-[#B6B6C0] text-xs font-mono uppercase tracking-[0.2em] hover:border-[#D4A373] hover:text-white transition-colors flex items-center gap-2"
+            className="w-full sm:w-auto px-8 py-4 border border-[#2E2E36] text-[#B6B6C0] text-xs font-mono uppercase tracking-[0.2em] hover:border-[#D4A373] hover:text-white transition-colors flex items-center justify-center gap-2"
           >
             <Mail size={14} aria-hidden="true" /> Email Us
           </a>
@@ -963,35 +963,39 @@ const Location = () => (
 
       <div className="lg:col-span-7">
         <Reveal delay={150}>
-          <div className="relative aspect-[16/9] w-full border border-[#2E2E36] overflow-hidden group hover:border-[#D4A373] transition-colors">
-            <iframe
-              data-testid="google-map-embed"
-              title="Map of Charmed Beauty 9 & 18 at 1201 Hooper Ave, Toms River, NJ 08753"
-              src="https://maps.google.com/maps?q=Charmed%20Beauty%209%20%26%2018%2C%201201%20Hooper%20Ave%2C%20Toms%20River%2C%20NJ%2008753&t=&z=15&ie=UTF8&iwloc=&output=embed"
-              className="map-dark absolute inset-0 w-full h-full"
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              allowFullScreen
-            ></iframe>
-            <div className="absolute top-4 left-4 right-4 flex justify-between items-center text-xs font-mono text-[#D4A373] pointer-events-none">
-              <span className="bg-black/80 px-2 py-1 border border-[#2E2E36]">TOMS RIVER, NJ</span>
-              <span className="bg-black/80 px-2 py-1 border border-[#2E2E36]">ZIP: 08753</span>
+          <div className="border border-[#2E2E36] overflow-hidden group hover:border-[#D4A373] transition-colors">
+            <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full">
+              <iframe
+                data-testid="google-map-embed"
+                title="Map of Charmed Beauty 9 & 18 at 1201 Hooper Ave, Toms River, NJ 08753"
+                src="https://maps.google.com/maps?q=Charmed%20Beauty%209%20%26%2018%2C%201201%20Hooper%20Ave%2C%20Toms%20River%2C%20NJ%2008753&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                className="map-dark absolute inset-0 w-full h-full"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+              ></iframe>
+              <div className="absolute top-3 left-3 right-3 flex justify-between items-center gap-2 text-[10px] sm:text-xs font-mono text-[#D4A373] pointer-events-none">
+                <span className="bg-black/85 px-2 py-1 border border-[#2E2E36]">TOMS RIVER, NJ</span>
+                <span className="bg-black/85 px-2 py-1 border border-[#2E2E36]">ZIP: 08753</span>
+              </div>
             </div>
-            <div className="absolute bottom-4 left-4 bg-black/90 p-4 border border-[#2E2E36] max-w-sm pointer-events-none">
-              <span className="text-xs font-bold text-white uppercase flex items-center gap-2">
-                <MapPin size={12} className="text-[#D4A373]" aria-hidden="true" /> Charmed Beauty 9 &amp; 18
-              </span>
-              <p className="text-[11px] text-[#B6B6C0] mt-1">1201 Hooper Ave, Suite 8 &amp; 9</p>
+            <div className="border-t border-[#2E2E36] bg-[#000000] p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div>
+                <span className="text-xs font-bold text-white uppercase flex items-center gap-2">
+                  <MapPin size={12} className="text-[#D4A373]" aria-hidden="true" /> Charmed Beauty 9 &amp; 18
+                </span>
+                <p className="text-[11px] font-mono text-[#B6B6C0] mt-1">1201 Hooper Ave, Suite 8 &amp; 9 · Toms River, NJ 08753</p>
+              </div>
+              <a
+                data-testid="map-link"
+                href={MAPS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="shrink-0 px-4 py-3 border border-[#D4A373] text-xs font-mono uppercase text-[#D4A373] hover:bg-[#D4A373] hover:text-black transition-colors flex items-center justify-center gap-1"
+              >
+                Open in Maps <ArrowUpRight size={14} aria-hidden="true" />
+              </a>
             </div>
-            <a
-              data-testid="map-link"
-              href={MAPS_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="absolute bottom-4 right-4 bg-black/90 px-3 py-2 border border-[#2E2E36] text-xs font-mono uppercase text-[#B6B6C0] hover:text-[#D4A373] hover:border-[#D4A373] transition-colors flex items-center gap-1"
-            >
-              Open in Maps <ArrowUpRight size={14} aria-hidden="true" />
-            </a>
           </div>
         </Reveal>
       </div>
@@ -1066,15 +1070,42 @@ const Footer = () => (
 );
 
 /* ---------------- Floating Book Now ---------------- */
-const FloatingBook = () => (
-  <BookLink
-    testId="floating-book-btn"
-    label="Book an appointment online"
-    className="float-book fixed bottom-6 right-6 z-50 px-6 py-4 bg-[#D4A373] text-black font-manifesto uppercase tracking-wider text-base hover:bg-white transition-colors flex items-center gap-2"
-  >
-    Book Now <ArrowUpRight size={16} aria-hidden="true" />
-  </BookLink>
-);
+const FloatingBook = () => {
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    let nearEnd = false;
+    const targets = [document.getElementById("contact"), document.querySelector("footer")].filter(Boolean);
+    const io = new IntersectionObserver(
+      (entries) => {
+        nearEnd = entries.some((e) => e.isIntersecting);
+        setShow(window.scrollY > window.innerHeight * 0.7 && !nearEnd);
+      },
+      { threshold: 0.01 }
+    );
+    targets.forEach((t) => io.observe(t));
+
+    const onScroll = () => setShow(window.scrollY > window.innerHeight * 0.7 && !nearEnd);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => {
+      io.disconnect();
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
+
+  return (
+    <div className={`float-wrap ${show ? "is-visible" : ""}`} aria-hidden={!show}>
+      <BookLink
+        testId="floating-book-btn"
+        label="Book an appointment online"
+        className="px-5 py-3 sm:px-6 sm:py-4 bg-[#D4A373] text-black font-manifesto uppercase tracking-wider text-sm sm:text-base shadow-[0_8px_30px_rgba(0,0,0,0.6)] hover:bg-white transition-colors flex items-center gap-2"
+      >
+        Book Now <ArrowUpRight size={16} aria-hidden="true" />
+      </BookLink>
+    </div>
+  );
+};
 
 function App() {
   return (

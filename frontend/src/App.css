@@ -118,7 +118,7 @@ body {
   70%  { box-shadow: 0 0 0 16px rgba(212, 163, 115, 0), 0 25px 50px -12px rgba(0, 0, 0, 0.7); }
   100% { box-shadow: 0 0 0 0 rgba(212, 163, 115, 0), 0 25px 50px -12px rgba(0, 0, 0, 0.7); }
 }
-.float-book {
+.float-wrap.is-visible a {
   animation: floatPulse 3s ease-out infinite;
 }
 
@@ -199,7 +199,7 @@ button:focus-visible {
   .hero-photo-img,
   .marquee-track,
   .menu-panel,
-  .float-book,
+  .float-wrap.is-visible a,
   .frame-img,
   .lightbox {
     animation: none !important;
@@ -297,6 +297,29 @@ button:focus-visible {
   -webkit-text-stroke: 1px rgba(212, 163, 115, 0.22);
   pointer-events: none;
   z-index: 1;
+}
+
+/* ---- Floating book CTA: only shows mid-page, never over the footer ---- */
+.float-wrap {
+  position: fixed;
+  right: 16px;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  z-index: 50;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(14px);
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+}
+.float-wrap.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+@media (min-width: 640px) {
+  .float-wrap {
+    right: 24px;
+    bottom: 24px;
+  }
 }
 
 /* ---- Gift card panel sheen ---- */
