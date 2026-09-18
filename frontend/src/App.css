@@ -168,6 +168,12 @@ body {
   animation: marquee 30s linear infinite;
 }
 
+/* ---- Embedded map: dark-mode filter to match palette ---- */
+.map-dark {
+  filter: invert(0.92) hue-rotate(180deg) saturate(0.35) brightness(0.85) contrast(0.95);
+  border: 0;
+}
+
 /* ---- Scrollbar ---- */
 ::-webkit-scrollbar { width: 10px; }
 ::-webkit-scrollbar-track { background: var(--charcoal-950); }
