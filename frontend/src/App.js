@@ -239,6 +239,8 @@ const Header = () => (
 );
 
 /* ---------------- Hero ---------------- */
+const HERO_STRIP = [2, 11, 21];
+
 const Hero = () => (
   <section
     id="hero"
@@ -246,9 +248,31 @@ const Hero = () => (
     aria-labelledby="hero-headline"
     className="relative overflow-hidden py-28 md:py-40 px-6 border-b border-[#2E2E36] min-h-[92vh] flex items-center"
   >
-    <div className="max-w-7xl mx-auto w-full relative">
+    <div className="hero-grid" aria-hidden="true"></div>
+    <div className="hero-scan" aria-hidden="true"></div>
+
+    <div className="hero-strip hidden lg:flex" aria-hidden="true">
+      {HERO_STRIP.map((n, i) => (
+        <img
+          key={n}
+          src={`/images/gallery/work-${String(n).padStart(2, "0")}.webp`}
+          alt=""
+          width="444"
+          height="444"
+          loading="lazy"
+          decoding="async"
+          className="hero-strip-img"
+          style={{ animationDelay: `${0.6 + i * 0.18}s` }}
+        />
+      ))}
+    </div>
+
+    <span className="hero-watermark hidden xl:block" aria-hidden="true">9&amp;18</span>
+
+    <div className="max-w-7xl mx-auto w-full relative z-10">
       <div className="max-w-5xl">
-        <p data-testid="hero-tagline" className="hero-in d1 text-xs font-mono uppercase tracking-[0.25em] text-[#D4A373] mb-6">
+        <p data-testid="hero-tagline" className="hero-in d1 inline-flex items-center gap-3 text-xs font-mono uppercase tracking-[0.25em] text-[#D4A373] mb-6 border border-[#D4A373]/30 px-4 py-2">
+          <span className="w-1.5 h-1.5 bg-[#D4A373] animate-pulse" aria-hidden="true"></span>
           Hair Salon • Toms River, NJ 08753
         </p>
         <h1
@@ -661,6 +685,9 @@ const Menu = () => {
 
 /* ---------------- Gift Cards ---------------- */
 const GIFT_AMOUNTS = ["$50", "$95", "$165", "Any Amount"];
+const GIFT_PHONE_DISPLAY = "(732) 330-4850";
+const GIFT_TEL = "tel:+17323304850";
+const GIFT_SMS = "sms:+17323304850";
 
 const GiftCards = () => (
   <section id="gift-cards" data-testid="gift-cards-section" aria-labelledby="gift-heading" className="py-24 px-6 border-b border-[#2E2E36] bg-[#000000]">
@@ -687,17 +714,17 @@ const GiftCards = () => (
         <div className="flex flex-wrap gap-3">
           <a
             data-testid="gift-text-btn"
-            href={`${PHONE_SMS}?body=Hi%20Charmed%20Beauty%20—%20I%27d%20like%20to%20buy%20a%20gift%20card.`}
+            href={`${GIFT_SMS}?body=Hi%20Charmed%20Beauty%20—%20I%27d%20like%20to%20buy%20a%20gift%20card.`}
             className="px-8 py-4 bg-[#D4A373] text-black text-xs font-mono uppercase tracking-[0.2em] hover:bg-white transition-colors flex items-center gap-2"
           >
             <MessageSquare size={14} aria-hidden="true" /> Text To Buy
           </a>
           <a
             data-testid="gift-call-btn"
-            href={PHONE_TEL}
+            href={GIFT_TEL}
             className="px-8 py-4 border border-[#D4A373] text-[#D4A373] text-xs font-mono uppercase tracking-[0.2em] hover:bg-[#D4A373] hover:text-black transition-colors flex items-center gap-2"
           >
-            <Phone size={14} aria-hidden="true" /> {PHONE_DISPLAY}
+            <Phone size={14} aria-hidden="true" /> {GIFT_PHONE_DISPLAY}
           </a>
           <a
             data-testid="gift-email-btn"
@@ -708,8 +735,8 @@ const GiftCards = () => (
           </a>
         </div>
         <p className="mt-6 text-[11px] font-mono text-[#6E6E78] leading-relaxed max-w-md">
-          Gift cards are arranged directly with your stylist — text, call or email and we’ll have one ready, physical
-          or sent straight to their phone.
+          Gift cards are arranged directly with Joanne — text, call or email and we’ll have one ready, physical or
+          sent straight to their phone.
         </p>
       </Reveal>
 

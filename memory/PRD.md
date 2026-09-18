@@ -49,6 +49,10 @@ Luxury beauty salon website for Charmed Beauty 9 & 18 (woman-owned studio, Toms 
 - **No online gift-card checkout exists today**: the GlossGenius `/gift-cards` path 404s for this studio and shop.saloninteractive.com/store/CharmedBeauty is a retail product store (no gift cards). CTAs therefore route to text/call/email. If the owner enables gift cards in GlossGenius, swap the CTA hrefs to that purchase URL.
 - Desktop header nav tidied (labels only, no numbers) to fit 7 entries without overlapping the brand.
 
+### 2026-09-18 (hero background modernisation + gift card contact)
+- Hero background: crisp copper hairline grid (masked fade), animated copper scan line, right-edge vertical strip of 3 desaturated client-work photos with copper hairlines (lg+), outlined "9&18" stroke watermark (xl+), and the "Hair Salon • Toms River, NJ 08753" kicker restyled as a bordered pill with a pulsing dot. All motion respects prefers-reduced-motion.
+- Gift card CTAs now use Joanne's line: (732) 330-4850 for both call and pre-filled text; copy updated to "arranged directly with Joanne".
+
 ## Testing- /app/test_reports/iteration_1.json — 9/11 pass; 2 defects (team.webp 404, 13px mobile header overflow) → both fixed
 - /app/test_reports/iteration_2.json — **100% (5/5)**: team photo, zero mobile overflow, menu tabs (8/13/3/1), 11 booking CTAs, gallery + lightbox, email links, map, no console errors
 
