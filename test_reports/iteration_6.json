@@ -1,0 +1,25 @@
+{
+  "summary": "Frontend-only regression for hero watermark overlap fix. Verified at 1280x800, 1440x900, 1920x1080, 2560x1400: .hero-watermark bounding box does NOT intersect the hero CTA caption ('Live calendar • Instant confirmation'), hero-book-btn, hero-headline, hero-tagline, or hero paragraph. Watermark sits anchored bottom-right, copper outline visible. Confirmed watermark is hidden at 390x844 and 768x1024. No horizontal overflow at any tested viewport. No console errors/warnings (fetchpriority React warning is gone). Light regression: menu tabs clickable, gallery filters reduce tile count as expected, lightbox opens with lightbox-image/close, floating book button hidden over hero and appears mid-page.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Footer area (1440x900)", "issues": ["Floating book button (.float-wrap) still has class 'is-visible' when scrolled to document bottom (footer in view). Spec says it should hide over hero/final CTA/footer. Visible in screenshot peeking bottom-right. Low priority; may be that IntersectionObserver targets a specific final-CTA element not yet in view — worth a spot check by main agent."]}
+    ]
+  },
+  "test_report_links": [],
+  "action_items": [
+    "Optional: verify floating-book-btn hides when footer/final CTA fully in view (observed still is-visible at document bottom on 1440x900)."
+  ],
+  "critical_code_review_comments": [
+    "Watermark fix is clean and localized to .hero-watermark in App.css; sizing (clamp 3.5rem–7rem), anchor (right 2vw / bottom 1.5vh), and stroke (1.5px rgba(212,163,115,0.6)) match spec."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A", "frontend": "100% for watermark bug + regressions; 1 minor observation on floating CTA at footer"},
+  "seed_data_creation": "None",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Watermark overlap bug is fully resolved. All hero element bounding boxes measured non-intersecting with .hero-watermark across 1280/1440/1920/2560 widths. Watermark correctly hidden below lg. Only outstanding observation: floating CTA visible at footer bottom — verify against spec (should hide over hero + final CTA + footer).",
+  "rca of the issue": "Previous large watermark (clamp 8rem–15rem) extended into hero content columns causing overlap with Book Now CTA card at 1440. Fix reduces max size to 7rem and re-anchors to right:2vw / bottom:1.5vh so the glyph stays in the empty bottom-right corner of the hero image column."
+}

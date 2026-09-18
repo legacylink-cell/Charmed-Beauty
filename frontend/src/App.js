@@ -805,11 +805,11 @@ const Reviews = () => (
         </div>
       </Reveal>
 
-      <ul className="grid grid-cols-1 md:grid-cols-2 gap-8 list-none">
+      <ul className="grid grid-cols-1 md:grid-cols-2 gap-8 list-none items-stretch">
         {REVIEWS.map((r, i) => (
-          <li key={r.name}>
-            <Reveal delay={i * 120}>
-              <figure data-testid={`review-card-${i}`} className="review-card p-8 bg-[#15151A]/90 backdrop-blur-md border border-[#2E2E36] h-full flex flex-col justify-between">
+          <li key={r.name} className="h-full">
+            <Reveal delay={i * 120} className="h-full">
+              <figure data-testid={`review-card-${i}`} className="review-card p-8 bg-[#15151A]/90 backdrop-blur-md border border-[#2E2E36] h-full min-h-[240px] flex flex-col justify-between">
                 <blockquote className="font-serif-accent italic text-lg md:text-xl text-[#ECECEC] leading-relaxed mb-6">“{r.quote}”</blockquote>
                 <figcaption className="text-xs font-mono text-[#D4A373] uppercase">
                   {r.name} • {r.tag}
@@ -1087,26 +1087,32 @@ const FloatingBook = () => {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    let nearEnd = true;
-    const blocked = new Map();
-    const targets = [
-      document.getElementById("hero"),
-      document.getElementById("contact"),
-      document.querySelector("footer"),
-    ].filter(Boolean);
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          blocked.set(e.target, e.isIntersecting);
-        });
-        nearEnd = [...blocked.values()].some(Boolean);
-        setShow(!nearEnd);
-      },
-      { threshold: 0.01 }
-    );
-    targets.forEach((t) => io.observe(t));
+    const targets = () =>
+      [document.getElementById("hero"), document.getElementById("contact"), document.querySelector("footer")].filter(Boolean);
 
-    return () => io.disconnect();
+    let queued = false;
+    const compute = () => {
+      queued = false;
+      const vh = window.innerHeight;
+      const blocked = targets().some((t) => {
+        const r = t.getBoundingClientRect();
+        return r.top < vh && r.bottom > 0;
+      });
+      setShow(!blocked);
+    };
+    const onScroll = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(compute);
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    compute();
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
   }, []);
 
   return (
