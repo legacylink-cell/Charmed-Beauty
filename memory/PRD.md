@@ -60,6 +60,12 @@ Luxury beauty salon website for Charmed Beauty 9 & 18 (woman-owned studio, Toms 
 - Hero mobile spacing: pt-8 + top-aligned (desktop keeps min-h-92vh centred); kicker pill fits on one line at 390px.
 - Verified by testing agent: iteration_3.json and iteration_4.json — 100%, no open issues.
 
+### 2026-09-18 (copy + UX polish)
+- Removed every em dash (U+2014) from site copy, meta tags, manifest and sitemap (hours now read "9:00 AM to 5:00 PM", social line "Facebook · @charmedbeautynj").
+- Menu category cards now smooth-scroll the revealed price panel to just below the sticky header (mobile and desktop) so no manual scrolling is needed.
+- Hero "9&18" watermark made clearly visible (2px copper stroke, faint fill, z-index above hero photo, shown from lg up).
+- Verified by testing agent: iteration_5.json, 100%, zero em dashes, auto-scroll and watermark all confirmed.
+
 ## Testing- /app/test_reports/iteration_1.json — 9/11 pass; 2 defects (team.webp 404, 13px mobile header overflow) → both fixed
 - /app/test_reports/iteration_2.json — **100% (5/5)**: team photo, zero mobile overflow, menu tabs (8/13/3/1), 11 booking CTAs, gallery + lightbox, email links, map, no console errors
 

@@ -1,0 +1,26 @@
+{
+  "summary": "Frontend-only regression for three requests: em-dash removal, mobile/desktop menu auto-scroll, and hero '9&18' watermark visibility. All three pass. Rendered body innerText has 0 em dashes (U+2014); all inspected meta tags (description, og:title, og:description, og:image:alt, twitter:title) have 0 em dashes; /site.webmanifest and /sitemap.xml both return 200 with 0 em dashes. Copy confirmed: studio hours read '9:00 AM to 5:00 PM' and source shows 'Facebook · @charmedbeautynj'. Menu auto-scroll works on both viewports: at 390x844 tapping menu-tab-cuts/color/treatments/occasion smooth-scrolls the revealed menu-panel to top 111-123px (within ~140px of the viewport top, just below the 107px sticky header) and the first service row is visible without further scroll; at 1440x900 panel_top settles at 69-81px and category tab cards remain visible above. Item counts verified cuts=8, color=13, treatments=3, occasion=1; every Book link href resolves to https://charmedbeauty918.glossgenius.com/booking-flow. Hero .hero-watermark is present at xl breakpoint with -webkit-text-stroke: 2px rgba(212,163,115,0.55), z-index 2, opacity 1; the 1920x1080 hero screenshot shows the outlined '9&18' clearly legible in the lower-right against the black hero. No horizontal overflow at 390 or 1440 (scrollWidth-clientWidth=0). Only console output is 3 non-blocking React dev warnings about the `fetchpriority` prop casing on <img> tags (should be fetchPriority in JSX) - not runtime errors.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "hero (1440x900)", "issues": ["Watermark is bound to xl:block (>=1280) and sits behind the BOOK NOW card, so at 1440 the visible portion is partially covered by the CTA card; at 1920 it is clearly legible. Consider unhiding at lg or positioning slightly higher for mid-desktop widths (nice-to-have, not blocking - user asked for visibility and it is now clearly visible on 1920)."]}
+    ]
+  },
+  "test_report_links": [],
+  "action_items": [
+    "OPTIONAL: replace fetchpriority='high' with fetchPriority='high' on <img> tags to silence 3 React dev-mode console warnings (no functional impact).",
+    "OPTIONAL: consider showing .hero-watermark from lg: instead of xl: so 1280-1439px viewports also see it clearly (currently visible-but-partially-behind-CTA at 1440, fully visible at 1920)."
+  ],
+  "critical_code_review_comments": [
+    "App.js is 1151 lines - past the 700-line guideline; splitting Menu, Hero, Gallery/Lightbox and Visit into separate component files would improve maintainability.",
+    "Menu.selectGroup uses requestAnimationFrame + getBoundingClientRect which works but a single scrollIntoView({behavior:'smooth', block:'start'}) with scroll-margin-top on #menu-panel would be simpler and match native anchor scroll."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a", "frontend": "100%"},
+  "seed_data_creation": "none",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "iteration_5 validated the three new asks (em dash removal, menu auto-scroll on mobile+desktop, hero watermark). All pass. Only lingering console noise is React fetchpriority casing warnings on <img>. No backend to test. Preview URL: https://lash-nails-studio.preview.emergentagent.com."
+}

@@ -287,8 +287,8 @@ button:focus-visible {
 
 .hero-watermark {
   position: absolute;
-  right: 3vw;
-  bottom: 4vh;
+  right: 2.5vw;
+  bottom: 2vh;
   font-family: "Archivo Black", Impact, "Arial Black", sans-serif;
   font-size: clamp(8rem, 16vw, 15rem);
   line-height: 0.8;

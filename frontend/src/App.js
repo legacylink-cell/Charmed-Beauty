@@ -255,13 +255,13 @@ const Hero = () => (
         alt=""
         width="1100"
         height="1650"
-        fetchpriority="high"
+        fetchPriority="high"
         decoding="async"
         className="hero-photo-img"
       />
     </div>
 
-    <span className="hero-watermark hidden xl:block" aria-hidden="true">9&amp;18</span>
+    <span className="hero-watermark hidden lg:block" aria-hidden="true">9&amp;18</span>
 
     <div className="max-w-7xl mx-auto w-full relative z-10">
       <div className="max-w-5xl">
