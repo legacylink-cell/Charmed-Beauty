@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://charmedbeauty9and18.com/sitemap.xml

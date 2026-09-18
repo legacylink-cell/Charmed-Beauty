@@ -1,91 +1,124 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "@/App.css";
-import { Phone, MessageSquare, Facebook, MapPin, ArrowUpRight, Star } from "lucide-react";
+import { Phone, MessageSquare, Mail, Facebook, MapPin, ArrowUpRight, Star, X, ChevronLeft, ChevronRight } from "lucide-react";
 
-const BOOKING_URL = "https://charmedbeauty918.glossgenius.com";
+const BOOKING_URL = "https://charmedbeauty918.glossgenius.com/booking-flow";
 const PHONE_DISPLAY = "(732) 955-9096";
 const PHONE_TEL = "tel:+17329559096";
 const PHONE_SMS = "sms:+17329559096";
+const EMAIL = "Charmedbeautynj@gmail.com";
+const EMAIL_HREF = "mailto:Charmedbeautynj@gmail.com";
 const MAPS_URL =
   "https://www.google.com/maps/search/?api=1&query=1201+Hooper+Ave+Sola+Salon+Studios+Toms+River+NJ+08753";
 const GOOGLE_REVIEWS_URL =
   "https://www.google.com/maps/search/?api=1&query=Charmed+Beauty+9+%26+18+Toms+River+NJ+08753";
 
-const SERVICES = [
+/* ---- Full service menu (real studio menu, booked through GlossGenius) ---- */
+const MENU = [
   {
-    id: "balayage",
-    tag: "Color / Signature",
-    name: "Balayage / Foilayage",
-    desc: "Hand-painted dimensional color with a lived-in grow-out. Toners, root work and long hair quoted at the chair.",
-    price: "$195+",
+    id: "cuts",
+    num: "A",
+    title: "Cuts & Styling",
+    blurb: "Shape engineered around bone structure and growth pattern.",
+    items: [
+      { name: "Women's Haircut & Blow-Dry", note: "Curling iron / flat iron extra", time: "30 min", price: "$50+" },
+      { name: "Women's Haircut — No Blow-Dry", note: "", time: "30 min", price: "Price varies" },
+      { name: "Men's Haircut", note: "", time: "30 min", price: "$25" },
+      { name: "Kids Haircut (9 yrs & younger)", note: "Blow-dry extra", time: "30 min", price: "$22+" },
+      { name: "Bang Trim", note: "", time: "15 min", price: "$10+" },
+      { name: "Blow-Out", note: "", time: "30 min", price: "$45+" },
+      { name: "Blow-Out with Curls", note: "", time: "60 min", price: "$55+" },
+      { name: "Curls", note: "", time: "60 min", price: "Price varies" },
+    ],
   },
   {
-    id: "babylights",
-    tag: "Color / Dimension",
-    name: "Full Foil Babylights",
-    desc: "Micro-fine foiling for seamless, light-saturated brightness from root to end.",
-    price: "$195+",
+    id: "color",
+    num: "B",
+    title: "Colour & Dimension",
+    blurb: "Hand-mapped formulas, custom toning, honest grow-out.",
+    items: [
+      { name: "Single Process Color", note: "Root touch-up. Toners & long hair extra", time: "90 min", price: "$65+" },
+      { name: "Full Foil Highlights", note: "Toners, root tap / smudge & long hair extra", time: "120 min", price: "$165+" },
+      { name: "Partial Foil Highlights", note: "Toners, root tap / smudge & long hair extra", time: "90 min", price: "$115+" },
+      { name: "Face Frame Foil", note: "Toners, root tap / smudge & long hair extra", time: "45 min", price: "Price varies" },
+      { name: "Balayage / Foilayage", note: "Toners, root tap / smudge & long hair extra", time: "120 min", price: "$195+" },
+      { name: "Balayage Face Frame", note: "Toners, root tap / smudge & long hair extra", time: "45 min", price: "Price varies" },
+      { name: "Full Foil Babylights", note: "Toners, root tap / smudge & long hair extra", time: "90 min", price: "$195+" },
+      { name: "Partial Babylights", note: "Toners, root tap / smudge & long hair extra", time: "120 min", price: "$150+" },
+      { name: "Lowlights", note: "Toners, root tap / smudge & long hair extra", time: "60 min", price: "$85+" },
+      { name: "Double Process", note: "", time: "120 min", price: "Price varies" },
+      { name: "Fantasy Colors", note: "Vivids, colour melts, creative placement", time: "120 min", price: "Price varies" },
+      { name: "Toner / Glaze", note: "", time: "45 min", price: "$35+" },
+      { name: "Glaze with Blow-Out", note: "", time: "90 min", price: "$75+" },
+    ],
   },
   {
-    id: "highlights",
-    tag: "Color / Dimension",
-    name: "Full Foil Highlights",
-    desc: "Classic full-head foiling, finished with custom toning for clean, expensive color.",
-    price: "$165+",
+    id: "treatments",
+    num: "C",
+    title: "Treatments & Texture",
+    blurb: "Repair and smoothing that holds through your routine.",
+    items: [
+      { name: "Keratin Treatment", note: "Months of glass-smooth, humidity-proof hair", time: "120 min", price: "$250" },
+      { name: "K18 Treatment — Add-On", note: "Molecular repair after lightening", time: "25 min", price: "$45" },
+      { name: "Perms", note: "Haircut and blow-dry not included", time: "90 min", price: "Price varies" },
+    ],
   },
   {
-    id: "keratin",
-    tag: "Treatment / Smoothing",
-    name: "Keratin Treatment",
-    desc: "Two hours in the chair. Months of glass-smooth, humidity-proof hair.",
-    price: "$250",
+    id: "occasion",
+    num: "D",
+    title: "Occasion & Bridal",
+    blurb: "Event architecture for hair — weddings, proms, photoshoots.",
+    items: [{ name: "Updo", note: "Bridal party & trial runs by request", time: "60 min", price: "$95+" }],
   },
-  {
-    id: "cut",
-    tag: "Cut / Core",
-    name: "Women's Haircut & Blow-Dry",
-    desc: "Precision cutting built around your bone structure, finished with a full blow-dry style.",
-    price: "$50+",
-  },
-  {
-    id: "blowout",
-    tag: "Finish / Style",
-    name: "Blow-Out",
-    desc: "The signature finish — volume, movement, and polish that turns a Tuesday into an occasion.",
-    price: "$45+",
-  },
-  {
-    id: "updo",
-    tag: "Occasion",
-    name: "Updo",
-    desc: "Event architecture for hair. Weddings, photoshoots, and nights that need a silhouette.",
-    price: "$95+",
-  },
+];
+
+/* ---- Real client work (photographed in-studio) ---- */
+const FILTERS = [
+  { id: "all", label: "All Work" },
+  { id: "color", label: "Colour" },
+  { id: "occasion", label: "Occasion & Bridal" },
+  { id: "cuts", label: "Cuts & Styling" },
+  { id: "transformations", label: "Transformations" },
+];
+
+const WORK = [
+  { n: 1, cat: "occasion", alt: "Soft blonde curled occasion updo styled at Charmed Beauty 9 & 18 in Toms River NJ", label: "Soft Curled Updo", svc: "Updo" },
+  { n: 2, cat: "occasion", alt: "Bridal updo with pearl hairpiece created in Toms River NJ", label: "Bridal Pearl Updo", svc: "Updo" },
+  { n: 3, cat: "cuts", alt: "Precision layered short cut on silver hair", label: "Layered Short Cut", svc: "Women's Haircut" },
+  { n: 4, cat: "cuts", alt: "Textured dark short haircut with soft volume", label: "Textured Short Cut", svc: "Women's Haircut" },
+  { n: 5, cat: "color", alt: "Violet fantasy hair colour applied at a Toms River NJ salon", label: "Violet Fantasy Colour", svc: "Fantasy Colors" },
+  { n: 6, cat: "transformations", alt: "Before and after blonde balayage transformation", label: "Balayage Transformation", svc: "Balayage / Foilayage" },
+  { n: 7, cat: "cuts", alt: "Men's skin fade haircut", label: "Men's Skin Fade", svc: "Men's Haircut" },
+  { n: 8, cat: "occasion", alt: "Bridal half-up style finished with fresh florals", label: "Bridal Half-Up", svc: "Updo" },
+  { n: 9, cat: "occasion", alt: "Dark curls pinned into a half-up occasion style", label: "Pinned Half-Up", svc: "Updo" },
+  { n: 10, cat: "transformations", alt: "Brunette to blonde colour transformation before and after", label: "Brunette To Blonde", svc: "Balayage / Foilayage" },
+  { n: 11, cat: "color", alt: "Teal and violet colour melt on long hair", label: "Teal Violet Melt", svc: "Fantasy Colors" },
+  { n: 12, cat: "occasion", alt: "High volume blonde updo for a formal event", label: "Volume Updo", svc: "Updo" },
+  { n: 13, cat: "cuts", alt: "Blonde layered blow-out with movement", label: "Layered Blow-Out", svc: "Blow-Out" },
+  { n: 14, cat: "occasion", alt: "Braided formal updo with crystal pin", label: "Braided Formal Updo", svc: "Updo" },
+  { n: 15, cat: "color", alt: "Vivid magenta hair colour on long straight hair", label: "Magenta Vivid", svc: "Fantasy Colors" },
+  { n: 16, cat: "occasion", alt: "Dimensional bronde curls styled half-up", label: "Dimensional Curls", svc: "Blow-Out with Curls" },
+  { n: 17, cat: "occasion", alt: "Bridal curled updo finished with pins", label: "Bridal Curled Updo", svc: "Updo" },
+  { n: 18, cat: "occasion", alt: "Braided blonde updo for a wedding party", label: "Braided Blonde Updo", svc: "Updo" },
+  { n: 19, cat: "cuts", alt: "Dark cropped pixie cut with texture", label: "Cropped Pixie", svc: "Women's Haircut" },
+  { n: 20, cat: "cuts", alt: "Blonde pixie cut with soft layers", label: "Blonde Pixie", svc: "Women's Haircut" },
+  { n: 21, cat: "cuts", alt: "Ash blonde layered bob with soft waves", label: "Ash Blonde Bob", svc: "Women's Haircut" },
 ];
 
 const REVIEWS = [
   {
-    quote:
-      "Always accommodating, amazing colorist, does exactly what you want and makes you feel like family.",
+    quote: "Always accommodating, amazing colorist, does exactly what you want and makes you feel like family.",
     name: "Debbie King",
-    tag: "Verified GlossGenius Review",
+    tag: "Verified Client Review",
   },
   {
     quote:
       "Joanne is amazing! Always providing great feedback on ideas and how they'll look — suggestions when you just want a change and don't know what. Love her!!",
     name: "Odette",
-    tag: "Verified GlossGenius Review",
+    tag: "Verified Client Review",
   },
-  {
-    quote: "I love leaving feeling refreshed! Andrea knows what works and it's always great!!",
-    name: "Melody",
-    tag: "Verified GlossGenius Review",
-  },
-  {
-    quote: "Love Joanne, she's the best!",
-    name: "Maria",
-    tag: "Verified GlossGenius Review",
-  },
+  { quote: "I love leaving feeling refreshed! Andrea knows what works and it's always great!!", name: "Melody", tag: "Verified Client Review" },
+  { quote: "Love Joanne, she's the best!", name: "Maria", tag: "Verified Client Review" },
 ];
 
 const HOURS = [
@@ -99,10 +132,26 @@ const HOURS = [
 ];
 
 const TEAM_PHONES = [
-  ["Joanne", "(732) 330-4850", "tel:+17323304850", "Owner"],
-  ["Andrea", "(732) 955-9096", "tel:+17329559096", null],
-  ["Lisa", "(732) 678-8547", "tel:+17326788547", null],
-  ["Phyllis", "(732) 581-6319", "tel:+17325816319", null],
+  ["Joanne", "(732) 330-4850", "tel:+17323304850"],
+  ["Andrea", "(732) 955-9096", "tel:+17329559096"],
+  ["Lisa", "(732) 678-8547", "tel:+17326788547"],
+  ["Phyllis", "(732) 581-6319", "tel:+17325816319"],
+];
+
+const TOWNS = [
+  ["Toms River", "5 min"],
+  ["Brick", "15 min"],
+  ["Beachwood", "10 min"],
+  ["Pine Beach", "10 min"],
+  ["Island Heights", "10 min"],
+  ["Bayville", "15 min"],
+  ["Lakewood", "20 min"],
+  ["Seaside Heights", "20 min"],
+  ["Lavallette", "20 min"],
+  ["Point Pleasant", "25 min"],
+  ["Jackson", "25 min"],
+  ["Forked River", "25 min"],
+  ["Manahawkin", "35 min"],
 ];
 
 /* Scroll-reveal wrapper: entrance-only motion */
@@ -132,42 +181,53 @@ const Reveal = ({ children, className = "", delay = 0 }) => {
   );
 };
 
-const BookLink = ({ href = BOOKING_URL, className = "", testId, children }) => (
-  <a
-    data-testid={testId}
-    href={href}
-    target="_blank"
-    rel="noopener noreferrer"
-    className={className}
-  >
+const BookLink = ({ href = BOOKING_URL, className = "", testId, label, children }) => (
+  <a data-testid={testId} href={href} target="_blank" rel="noopener noreferrer" aria-label={label} className={className}>
     {children}
   </a>
 );
 
 /* ---------------- Header ---------------- */
+const NAV = [
+  ["01", "Manifesto", "#manifesto"],
+  ["02", "The Work", "#work"],
+  ["03", "Full Menu", "#menu"],
+  ["04", "Reviews", "#reviews"],
+  ["05", "Artists", "#artists"],
+  ["06", "Visit", "#location"],
+];
+
 const Header = () => (
-  <header className="border-b border-[#25252B] bg-[#080809]/95 backdrop-blur-md sticky top-0 z-50">
-    <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-      <a href="#hero" data-testid="header-brand" className="flex items-center space-x-3">
-        <span className="w-3 h-3 bg-[#D4A373]"></span>
-        <span className="font-manifesto tracking-tight text-lg uppercase text-white">
-          Charmed Beauty 9 &amp; 18
-        </span>
+  <header className="border-b border-[#2E2E36] bg-[#000000]/95 backdrop-blur-md sticky top-0 z-50">
+    <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between gap-4">
+      <a href="#hero" data-testid="header-brand" className="flex items-center space-x-3 shrink-0">
+        <span className="w-3 h-3 bg-[#D4A373]" aria-hidden="true"></span>
+        <span className="font-manifesto tracking-tight text-base sm:text-lg uppercase text-white">Charmed Beauty 9 &amp; 18</span>
       </a>
-      <nav className="hidden md:flex items-center space-x-8 text-xs font-mono uppercase tracking-widest text-[#8E8E98]">
-        <a data-testid="nav-manifesto" href="#manifesto" className="hover:text-white transition-colors">01 / Manifesto</a>
-        <a data-testid="nav-offerings" href="#offerings" className="hover:text-white transition-colors">02 / Offerings</a>
-        <a data-testid="nav-standards" href="#standards" className="hover:text-white transition-colors">03 / Standards</a>
-        <a data-testid="nav-artists" href="#artists" className="hover:text-white transition-colors">04 / Artists</a>
-        <a data-testid="nav-location" href="#location" className="hover:text-white transition-colors">05 / Location</a>
+      <nav aria-label="Section navigation" className="hidden lg:flex items-center space-x-7 text-xs font-mono uppercase tracking-widest text-[#B6B6C0]">
+        {NAV.map(([n, label, href]) => (
+          <a key={href} data-testid={`nav-${label.toLowerCase().replace(/\s+/g, "-")}`} href={href} className="hover:text-white transition-colors">
+            {n} / {label}
+          </a>
+        ))}
       </nav>
       <BookLink
         testId="header-book-btn"
-        className="px-5 py-2 bg-[#D4A373] text-black text-xs font-bold uppercase tracking-wider hover:bg-white transition-colors"
+        label="Book an appointment online"
+        className="px-5 py-2 bg-[#D4A373] text-black text-xs font-bold uppercase tracking-wider hover:bg-white transition-colors shrink-0"
       >
-        Direct Booking
+        Book Online
       </BookLink>
     </div>
+    <nav aria-label="Quick section navigation" className="lg:hidden border-t border-[#2E2E36] overflow-x-auto no-scrollbar">
+      <div className="flex items-center gap-5 px-6 py-3 text-[11px] font-mono uppercase tracking-widest text-[#B6B6C0] w-max">
+        {NAV.map(([n, label, href]) => (
+          <a key={href} data-testid={`mobile-nav-${label.toLowerCase().replace(/\s+/g, "-")}`} href={href} className="whitespace-nowrap hover:text-white transition-colors">
+            {label}
+          </a>
+        ))}
+      </div>
+    </nav>
   </header>
 );
 
@@ -176,48 +236,42 @@ const Hero = () => (
   <section
     id="hero"
     data-testid="hero-section"
-    className="relative overflow-hidden py-28 md:py-40 px-6 border-b border-[#25252B] min-h-[92vh] flex items-center"
+    aria-labelledby="hero-headline"
+    className="relative overflow-hidden py-28 md:py-40 px-6 border-b border-[#2E2E36] min-h-[92vh] flex items-center"
   >
-    <div className="hero-glow -top-1/4 -right-1/4" aria-hidden="true"></div>
     <div className="max-w-7xl mx-auto w-full relative">
       <div className="max-w-5xl">
-        <div
-          data-testid="hero-tagline"
-          className="hero-in d1 text-xs font-mono uppercase tracking-[0.25em] text-[#D4A373] mb-6"
-        >
-          Studio Discipline • Toms River, NJ 08753
-        </div>
+        <p data-testid="hero-tagline" className="hero-in d1 text-xs font-mono uppercase tracking-[0.25em] text-[#D4A373] mb-6">
+          Hair Salon • Toms River, NJ 08753
+        </p>
         <h1
+          id="hero-headline"
           data-testid="hero-headline"
           className="hero-in d2 font-manifesto text-6xl sm:text-8xl md:text-9xl uppercase tracking-tighter text-white leading-[0.88] mb-6"
         >
           Charmed<br />Beauty<br />
           <span className="text-[#D4A373]">9 &amp; 18</span>
         </h1>
-        <div
-          data-testid="hero-subhead"
-          className="hero-in d3 font-serif-accent italic text-2xl md:text-4xl text-[#ECECEC] mb-10"
-        >
+        <p data-testid="hero-subhead" className="hero-in d3 font-serif-accent italic text-2xl md:text-4xl text-[#ECECEC] mb-10">
           Couture color. Lasting precision.
-        </div>
+        </p>
         <div className="hero-in d4 grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
           <div className="md:col-span-7">
-            <p className="text-lg md:text-xl text-[#8E8E98] font-light leading-relaxed">
-              Designs nobody else in town does — precision work that lasts weeks. Dimensional
-              color, architectural cuts, and smoothing treatments engineered around your hair,
-              your routine, your reflection.
+            <p className="text-lg md:text-xl text-[#B6B6C0] font-light leading-relaxed">
+              A woman-owned hair studio on Hooper Ave serving Toms River, Brick, Beachwood, Bayville and the Jersey Shore.
+              Dimensional color, architectural cuts, keratin smoothing and bridal styling — designs nobody else in town
+              does, built to last weeks.
             </p>
           </div>
           <div className="md:col-span-5 flex flex-col space-y-4">
             <BookLink
               testId="hero-book-btn"
+              label="Book an appointment online"
               className="w-full py-4 bg-white text-black font-manifesto text-xl uppercase tracking-wider text-center hover:bg-[#D4A373] transition-colors"
             >
               Book Now
             </BookLink>
-            <span className="text-xs font-mono text-[#8E8E98] text-center">
-              Live GlossGenius calendar • Instant confirmation
-            </span>
+            <span className="text-xs font-mono text-[#B6B6C0] text-center">Live calendar • Instant confirmation</span>
           </div>
         </div>
       </div>
@@ -248,17 +302,14 @@ const CHAPTERS = [
 ];
 
 const Manifesto = () => (
-  <section id="manifesto" data-testid="manifesto-section" className="py-24 px-6 border-b border-[#25252B]">
+  <section id="manifesto" data-testid="manifesto-section" aria-label="Studio manifesto" className="py-24 px-6 border-b border-[#2E2E36]">
     <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
       {CHAPTERS.map((c, i) => (
         <Reveal key={c.n} delay={i * 150}>
-          <div
-            data-testid={`manifesto-chapter-${c.n}`}
-            className={`border-t-2 pt-6 ${c.accent ? "border-[#D4A373]" : "border-[#8E8E98]"}`}
-          >
+          <div data-testid={`manifesto-chapter-${c.n}`} className={`border-t-2 pt-6 ${c.accent ? "border-[#D4A373]" : "border-[#6E6E78]"}`}>
             <span className="text-xs font-mono text-[#D4A373] tracking-[0.3em]">{c.n}</span>
             <h2 className="text-xl font-bold uppercase tracking-wide text-white mt-2 mb-3">{c.title}</h2>
-            <p className="text-sm text-[#8E8E98] leading-relaxed">{c.body}</p>
+            <p className="text-sm text-[#B6B6C0] leading-relaxed">{c.body}</p>
           </div>
         </Reveal>
       ))}
@@ -268,16 +319,13 @@ const Manifesto = () => (
 
 /* ---------------- Marquee strip ---------------- */
 const Marquee = () => {
-  const items = ["Dimensional Color", "Precision Cuts", "Keratin Smoothing", "Blow-Outs", "Balayage", "Occasion Styling"];
+  const items = ["Dimensional Color", "Precision Cuts", "Keratin Smoothing", "Blow-Outs", "Balayage", "Bridal Updos", "Fantasy Color"];
   const row = [...items, ...items];
   return (
-    <div data-testid="marquee-strip" className="border-b border-[#25252B] bg-[#080809] py-4 overflow-hidden">
+    <div data-testid="marquee-strip" aria-hidden="true" className="border-b border-[#2E2E36] bg-[#000000] py-4 overflow-hidden">
       <div className="marquee-track">
         {row.map((item, i) => (
-          <span
-            key={i}
-            className="font-manifesto uppercase text-2xl md:text-3xl tracking-tight text-[#3A3A42] px-8 whitespace-nowrap"
-          >
+          <span key={i} className="font-manifesto uppercase text-2xl md:text-3xl tracking-tight text-[#33333B] px-8 whitespace-nowrap">
             {item} <span className="text-[#D4A373] px-4">•</span>
           </span>
         ))}
@@ -286,129 +334,312 @@ const Marquee = () => {
   );
 };
 
-/* ---------------- Editorial Interlude (type-only, no imagery) ---------------- */
+/* ---------------- The Work: real client gallery + lightbox ---------------- */
+const Gallery = () => {
+  const [filter, setFilter] = useState("all");
+  const [open, setOpen] = useState(null);
+
+  const shown = useMemo(() => (filter === "all" ? WORK : WORK.filter((w) => w.cat === filter)), [filter]);
+
+  const step = useCallback(
+    (dir) => {
+      setOpen((cur) => {
+        if (cur === null) return cur;
+        const idx = shown.findIndex((w) => w.n === cur);
+        const next = (idx + dir + shown.length) % shown.length;
+        return shown[next].n;
+      });
+    },
+    [shown]
+  );
+
+  useEffect(() => {
+    if (open === null) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") setOpen(null);
+      if (e.key === "ArrowRight") step(1);
+      if (e.key === "ArrowLeft") step(-1);
+    };
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [open, step]);
+
+  const active = open === null ? null : WORK.find((w) => w.n === open);
+
+  return (
+    <section id="work" data-testid="work-section" aria-labelledby="work-heading" className="py-24 px-6 border-b border-[#2E2E36]">
+      <div className="max-w-7xl mx-auto">
+        <Reveal>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+            <div>
+              <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#D4A373]">02 / Client Work</span>
+              <h2 id="work-heading" className="font-manifesto text-4xl sm:text-6xl uppercase text-white mt-2">
+                Real Hair.<br />Real Clients.
+              </h2>
+            </div>
+            <p className="text-sm text-[#B6B6C0] max-w-sm font-mono leading-relaxed">
+              Photographed in our Toms River suite. Tap any look, then book the exact service behind it.
+            </p>
+          </div>
+        </Reveal>
+
+        <Reveal delay={80}>
+          <div role="group" aria-label="Filter client work by category" className="flex flex-wrap gap-2 mb-8">
+            {FILTERS.map((f) => (
+              <button
+                key={f.id}
+                type="button"
+                data-testid={`work-filter-${f.id}`}
+                aria-pressed={filter === f.id}
+                onClick={() => setFilter(f.id)}
+                className={`px-4 py-2 text-xs font-mono uppercase tracking-[0.15em] border transition-colors ${
+                  filter === f.id
+                    ? "bg-[#D4A373] text-black border-[#D4A373]"
+                    : "text-[#B6B6C0] border-[#2E2E36] hover:border-[#D4A373] hover:text-white"
+                }`}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+        </Reveal>
+
+        <ul data-testid="work-grid" className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2 sm:gap-3 list-none">
+          {shown.map((w, i) => (
+            <li key={w.n}>
+              <button
+                type="button"
+                data-testid={`work-tile-${w.n}`}
+                onClick={() => setOpen(w.n)}
+                className="work-tile group relative block w-full aspect-square overflow-hidden bg-[#0A0A0C]"
+                aria-label={`View larger: ${w.label}`}
+              >
+                <img
+                  src={`/images/gallery/work-${String(w.n).padStart(2, "0")}.webp`}
+                  alt={w.alt}
+                  width="444"
+                  height="444"
+                  loading={i < 6 ? "eager" : "lazy"}
+                  decoding="async"
+                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                />
+                <span className="absolute inset-0 bg-gradient-to-t from-[#000000]/90 via-[#000000]/10 to-transparent opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-300"></span>
+                <span className="absolute bottom-0 left-0 right-0 p-3 text-left translate-y-2 group-hover:translate-y-0 group-focus-visible:translate-y-0 opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-all duration-300">
+                  <span className="block text-[11px] font-mono uppercase tracking-wider text-white leading-tight">{w.label}</span>
+                  <span className="block text-[10px] font-mono uppercase text-[#D4A373] mt-1">{w.svc}</span>
+                </span>
+              </button>
+            </li>
+          ))}
+        </ul>
+
+        <Reveal delay={120}>
+          <div className="mt-8 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8">
+            <BookLink
+              testId="work-book-btn"
+              label="Book the look — online booking"
+              className="px-8 py-4 bg-[#D4A373] text-black text-xs font-mono uppercase tracking-[0.2em] hover:bg-white transition-colors w-fit"
+            >
+              Book Your Look
+            </BookLink>
+            <span className="text-xs font-mono text-[#B6B6C0] uppercase tracking-widest">
+              {WORK.length} recent looks • Colour, cuts, bridal &amp; transformations
+            </span>
+          </div>
+        </Reveal>
+      </div>
+
+      {active && (
+        <div
+          data-testid="work-lightbox"
+          role="dialog"
+          aria-modal="true"
+          aria-label={active.label}
+          className="lightbox fixed inset-0 z-[70] flex items-center justify-center p-4 sm:p-8 bg-[#000000]/95 backdrop-blur-md"
+          onClick={() => setOpen(null)}
+        >
+          <div className="relative max-w-3xl w-full" onClick={(e) => e.stopPropagation()}>
+            <img
+              src={`/images/gallery/work-${String(active.n).padStart(2, "0")}.webp`}
+              alt={active.alt}
+              width="444"
+              height="444"
+              className="w-full max-h-[62vh] object-contain border border-[#2E2E36] bg-[#0A0A0C]"
+            />
+            <div className="mt-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <p data-testid="lightbox-label" className="font-manifesto uppercase text-2xl text-white leading-none">{active.label}</p>
+                <p className="text-xs font-mono uppercase tracking-widest text-[#D4A373] mt-2">Service: {active.svc}</p>
+              </div>
+              <BookLink
+                testId="lightbox-book-btn"
+                label={`Book ${active.svc}`}
+                className="px-6 py-3 bg-[#D4A373] text-black text-xs font-mono uppercase tracking-[0.2em] hover:bg-white transition-colors w-fit"
+              >
+                Book This Look
+              </BookLink>
+            </div>
+            <button
+              type="button"
+              data-testid="lightbox-close"
+              onClick={() => setOpen(null)}
+              aria-label="Close image viewer"
+              className="absolute -top-3 -right-3 sm:-top-4 sm:-right-4 w-10 h-10 bg-[#D4A373] text-black flex items-center justify-center hover:bg-white transition-colors"
+            >
+              <X size={18} />
+            </button>
+            <button
+              type="button"
+              data-testid="lightbox-prev"
+              onClick={() => step(-1)}
+              aria-label="Previous look"
+              className="absolute left-0 top-1/2 -translate-y-1/2 -ml-2 sm:-ml-14 w-10 h-10 bg-[#15151A] border border-[#2E2E36] text-white flex items-center justify-center hover:border-[#D4A373] hover:text-[#D4A373] transition-colors"
+            >
+              <ChevronLeft size={18} />
+            </button>
+            <button
+              type="button"
+              data-testid="lightbox-next"
+              onClick={() => step(1)}
+              aria-label="Next look"
+              className="absolute right-0 top-1/2 -translate-y-1/2 -mr-2 sm:-mr-14 w-10 h-10 bg-[#15151A] border border-[#2E2E36] text-white flex items-center justify-center hover:border-[#D4A373] hover:text-[#D4A373] transition-colors"
+            >
+              <ChevronRight size={18} />
+            </button>
+          </div>
+        </div>
+      )}
+    </section>
+  );
+};
+
+/* ---------------- Editorial Interlude (type-only) ---------------- */
 const Interlude = () => (
-  <section data-testid="interlude-section" className="py-28 md:py-36 px-6 border-b border-[#25252B] relative overflow-hidden">
-    <div className="hero-glow -top-1/2 -left-1/4" aria-hidden="true"></div>
+  <section data-testid="interlude-section" aria-label="Studio promise" className="py-28 md:py-36 px-6 border-b border-[#2E2E36] relative overflow-hidden">
     <div className="max-w-7xl mx-auto relative">
       <Reveal>
         <div className="flex items-center gap-6 mb-10">
-          <span className="w-3 h-3 bg-[#D4A373]"></span>
-          <span className="text-xs font-mono uppercase tracking-[0.3em] text-[#8E8E98]">The Charmed Standard</span>
+          <span className="w-3 h-3 bg-[#D4A373]" aria-hidden="true"></span>
+          <span className="text-xs font-mono uppercase tracking-[0.3em] text-[#B6B6C0]">The Charmed Standard</span>
         </div>
-        <p className="font-serif-accent italic text-3xl sm:text-5xl md:text-6xl text-white leading-[1.15] max-w-5xl">
-          “Designs nobody else in town does —
-          <span className="text-[#D4A373]"> precision work that lasts weeks.”</span>
-        </p>
+        <blockquote className="font-serif-accent italic text-3xl sm:text-5xl md:text-6xl text-white leading-[1.15] max-w-5xl">
+          “Designs nobody else in town does —<span className="text-[#D4A373]"> precision work that lasts weeks.”</span>
+        </blockquote>
         <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-10">
           <BookLink
             testId="interlude-book-btn"
+            label="Book your chair online"
             className="inline-block px-8 py-4 border border-[#D4A373] text-[#D4A373] text-xs font-mono uppercase tracking-[0.2em] hover:bg-[#D4A373] hover:text-black transition-colors w-fit"
           >
             Book Your Chair
           </BookLink>
-          <span className="text-xs font-mono text-[#8E8E98] uppercase tracking-widest">
-            The owner’s promise — in her own words
-          </span>
+          <span className="text-xs font-mono text-[#B6B6C0] uppercase tracking-widest">The owner’s promise — in her own words</span>
         </div>
       </Reveal>
     </div>
   </section>
 );
 
-/* ---------------- Offerings ---------------- */
-const Offerings = () => (
-  <section id="offerings" data-testid="offerings-section" className="py-24 px-6 border-b border-[#25252B]">
+/* ---------------- Full Menu ---------------- */
+const Menu = () => (
+  <section id="menu" data-testid="menu-section" aria-labelledby="menu-heading" className="py-24 px-6 border-b border-[#2E2E36]">
     <div className="max-w-7xl mx-auto">
       <Reveal>
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div>
-            <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#D4A373]">02 / Treatment Catalog</span>
-            <h2 className="font-manifesto text-4xl sm:text-6xl uppercase text-white mt-2">Services &amp; Pricing</h2>
+            <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#D4A373]">03 / Full Service Menu</span>
+            <h2 id="menu-heading" className="font-manifesto text-4xl sm:text-6xl uppercase text-white mt-2">
+              Services &amp; Pricing
+            </h2>
           </div>
-          <p className="mt-4 md:mt-0 text-sm text-[#8E8E98] max-w-sm font-mono">
-            Official GlossGenius menu rates. Reserve directly online.
+          <p className="text-sm text-[#B6B6C0] max-w-sm font-mono leading-relaxed">
+            Every service we offer, start to finish. Reserve any of them online in seconds.
           </p>
         </div>
       </Reveal>
 
-      <div className="divide-y divide-[#25252B] border-y border-[#25252B]">
-        {SERVICES.map((s, i) => (
-          <Reveal key={s.id} delay={i * 60}>
-            <div
-              data-testid={`service-row-${s.id}`}
-              className="service-row py-8 px-4 md:px-6 grid grid-cols-1 md:grid-cols-12 gap-6 items-center"
-            >
-              <div className="md:col-span-4">
-                <span className="text-xs font-mono text-[#D4A373] uppercase">{s.tag}</span>
-                <h3 className="text-2xl font-bold uppercase text-white mt-1">{s.name}</h3>
+      <div className="space-y-16">
+        {MENU.map((group) => (
+          <div key={group.id} data-testid={`menu-group-${group.id}`}>
+            <Reveal>
+              <div className="flex items-baseline gap-4 border-b border-[#D4A373]/40 pb-4 mb-2">
+                <span className="font-manifesto text-3xl sm:text-4xl uppercase text-[#D4A373] leading-none">{group.num}</span>
+                <div>
+                  <h3 className="font-manifesto text-2xl sm:text-3xl uppercase text-white leading-none">{group.title}</h3>
+                  <p className="text-xs font-mono text-[#B6B6C0] mt-2">{group.blurb}</p>
+                </div>
               </div>
-              <div className="md:col-span-5 text-sm text-[#8E8E98]">{s.desc}</div>
-              <div className="md:col-span-3 flex items-center justify-between md:justify-end md:space-x-8">
-                <span data-testid={`service-price-${s.id}`} className="service-price font-mono text-xl text-white font-semibold">
-                  {s.price}
-                </span>
-                <BookLink
-                  testId={`service-book-${s.id}`}
-                  className="px-4 py-2 border border-[#D4A373] text-[#D4A373] text-xs font-mono uppercase hover:bg-[#D4A373] hover:text-black transition-colors"
-                >
-                  Book
-                </BookLink>
-              </div>
-            </div>
-          </Reveal>
+            </Reveal>
+            <ul className="divide-y divide-[#2E2E36] list-none">
+              {group.items.map((s) => (
+                <li key={s.name}>
+                  <div
+                    data-testid={`menu-item-${s.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/-$/, "")}`}
+                    className="service-row py-6 px-2 md:px-4 grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-6 md:items-center"
+                  >
+                    <div className="md:col-span-6">
+                      <h4 className="text-lg md:text-xl font-bold uppercase text-white tracking-wide">{s.name}</h4>
+                      {s.note && <p className="text-xs font-mono text-[#B6B6C0] mt-1">{s.note}</p>}
+                    </div>
+                    <div className="hidden md:block md:col-span-2 text-xs font-mono uppercase text-[#B6B6C0]">{s.time}</div>
+                    <div className="md:col-span-4 flex items-center justify-between md:justify-end gap-4 md:gap-6">
+                      <span className="md:hidden text-xs font-mono uppercase text-[#B6B6C0]">{s.time}</span>
+                      <span className="service-price font-mono text-lg md:text-xl text-white font-semibold whitespace-nowrap">{s.price}</span>
+                      <BookLink
+                        testId={`menu-book-${s.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/-$/, "")}`}
+                        label={`Book ${s.name}`}
+                        className="px-4 py-2 border border-[#D4A373] text-[#D4A373] text-xs font-mono uppercase hover:bg-[#D4A373] hover:text-black transition-colors whitespace-nowrap"
+                      >
+                        Book
+                      </BookLink>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
         ))}
       </div>
 
-      <Reveal delay={200}>
-        <p className="mt-6 text-xs font-mono text-[#8E8E98]">
-          Full menu — men's cuts, kids cuts, fantasy color, perms &amp; more — on the live booking calendar.
+      <Reveal delay={150}>
+        <p className="mt-10 text-xs font-mono text-[#B6B6C0] leading-relaxed max-w-2xl">
+          Prices start at the listed rate. Long, dense or previously-coloured hair, added toners and root work are quoted at
+          the chair. Not sure what you need? Call or text and we’ll map it out with you.
         </p>
       </Reveal>
     </div>
   </section>
 );
 
-/* ---------------- Standards / Reviews ---------------- */
-const Standards = () => (
-  <section id="standards" data-testid="standards-section" className="relative py-24 px-6 border-b border-[#25252B] overflow-hidden">
-    <img
-      src="https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=2000&auto=format&fit=crop"
-      alt=""
-      aria-hidden="true"
-      className="absolute inset-0 w-full h-full object-cover opacity-[0.08]"
-      loading="lazy"
-    />
+/* ---------------- Reviews ---------------- */
+const Reviews = () => (
+  <section id="reviews" data-testid="reviews-section" aria-labelledby="reviews-heading" className="relative py-24 px-6 border-b border-[#2E2E36] overflow-hidden bg-[#000000]">
     <div className="max-w-7xl mx-auto relative">
       <Reveal>
         <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
-            <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#D4A373]">03 / Studio Verification</span>
-            <h2 className="font-manifesto text-4xl sm:text-5xl uppercase text-white mt-2">Verified Client Reviews</h2>
+            <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#D4A373]">04 / Studio Verification</span>
+            <h2 id="reviews-heading" className="font-manifesto text-4xl sm:text-5xl uppercase text-white mt-2">
+              Verified Client Reviews
+            </h2>
           </div>
           <div className="flex gap-10 md:gap-16">
             <div data-testid="review-count" className="text-left md:text-right">
               <div className="font-manifesto text-6xl md:text-7xl text-[#D4A373] leading-none">675</div>
-              <div className="text-xs font-mono uppercase tracking-widest text-[#8E8E98] mt-1">
-                GlossGenius Reviews
-              </div>
+              <div className="text-xs font-mono uppercase tracking-widest text-[#B6B6C0] mt-1">Client Reviews</div>
             </div>
-            <a
-              data-testid="google-rating"
-              href={GOOGLE_REVIEWS_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-left md:text-right group"
-            >
-              <div className="font-manifesto text-6xl md:text-7xl text-white leading-none group-hover:text-[#D4A373] transition-colors">
-                5.0
-              </div>
-              <div className="flex md:justify-end gap-1 mt-1" aria-label="5 out of 5 stars">
+            <a data-testid="google-rating" href={GOOGLE_REVIEWS_URL} target="_blank" rel="noopener noreferrer" className="text-left md:text-right group">
+              <div className="font-manifesto text-6xl md:text-7xl text-white leading-none group-hover:text-[#D4A373] transition-colors">5.0</div>
+              <div className="flex md:justify-end gap-1 mt-1" role="img" aria-label="Rated 5 out of 5 stars">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={12} className="text-[#C9A227]" fill="currentColor" />
+                  <Star key={i} size={12} className="text-[#C9A227]" fill="currentColor" aria-hidden="true" />
                 ))}
               </div>
-              <div className="text-xs font-mono uppercase tracking-widest text-[#8E8E98] mt-1 group-hover:text-white transition-colors">
+              <div className="text-xs font-mono uppercase tracking-widest text-[#B6B6C0] mt-1 group-hover:text-white transition-colors">
                 54+ Google Reviews
               </div>
             </a>
@@ -416,81 +647,69 @@ const Standards = () => (
         </div>
       </Reveal>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <ul className="grid grid-cols-1 md:grid-cols-2 gap-8 list-none">
         {REVIEWS.map((r, i) => (
-          <Reveal key={r.name} delay={i * 120}>
-            <div
-              data-testid={`review-card-${i}`}
-              className="review-card p-8 bg-[#18181C]/90 backdrop-blur-md border border-[#25252B] h-full flex flex-col justify-between"
-            >
-              <p className="font-serif-accent italic text-lg md:text-xl text-[#ECECEC] leading-relaxed mb-6">
-                “{r.quote}”
-              </p>
-              <div className="text-xs font-mono text-[#D4A373] uppercase">
-                {r.name} • {r.tag}
-              </div>
-            </div>
-          </Reveal>
+          <li key={r.name}>
+            <Reveal delay={i * 120}>
+              <figure data-testid={`review-card-${i}`} className="review-card p-8 bg-[#15151A]/90 backdrop-blur-md border border-[#2E2E36] h-full flex flex-col justify-between">
+                <blockquote className="font-serif-accent italic text-lg md:text-xl text-[#ECECEC] leading-relaxed mb-6">“{r.quote}”</blockquote>
+                <figcaption className="text-xs font-mono text-[#D4A373] uppercase">
+                  {r.name} • {r.tag}
+                </figcaption>
+              </figure>
+            </Reveal>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   </section>
 );
 
-/* ---------------- The Artists (team photo) ---------------- */
+/* ---------------- The Artists ---------------- */
 const Artists = () => (
-  <section id="artists" data-testid="artists-section" className="py-24 px-6 border-b border-[#25252B]">
+  <section id="artists" data-testid="artists-section" aria-labelledby="artists-heading" className="py-24 px-6 border-b border-[#2E2E36]">
     <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
       <Reveal className="lg:col-span-5 order-2 lg:order-1">
-        <div className="relative border border-[#25252B] overflow-hidden group">
+        <div className="relative border border-[#2E2E36] overflow-hidden group">
           <img
             data-testid="team-photo"
-            src="/images/team.png"
-            alt="The Charmed Beauty 9 & 18 stylists at Sola Salon Studios"
-            className="w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+            src="/images/team.webp"
+            alt="The stylists of Charmed Beauty 9 & 18 inside Sola Salon Studios, Toms River NJ"
+            width="487"
+            height="510"
+            className="w-full h-auto object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
             loading="lazy"
+            decoding="async"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#080809]/80 via-transparent to-transparent"></div>
-          <div className="absolute bottom-0 left-0 p-4 bg-black/80 backdrop-blur-md border border-[#25252B] m-4">
+          <div className="absolute inset-0 bg-gradient-to-t from-[#000000]/80 via-transparent to-transparent" aria-hidden="true"></div>
+          <div className="absolute bottom-0 left-0 p-4 bg-black/80 backdrop-blur-md border border-[#2E2E36] m-4">
             <span className="text-xs font-mono text-[#D4A373] uppercase">The Hands Behind The Work</span>
           </div>
         </div>
       </Reveal>
       <Reveal delay={150} className="lg:col-span-7 order-1 lg:order-2">
-        <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#D4A373]">04 / The Artists</span>
-        <h2 className="font-manifesto text-4xl sm:text-6xl uppercase text-white mt-2 mb-6">
+        <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#D4A373]">05 / The Artists</span>
+        <h2 id="artists-heading" className="font-manifesto text-4xl sm:text-6xl uppercase text-white mt-2 mb-6">
           Four Stylists.<br />One Standard.
         </h2>
-        <p className="text-base md:text-lg text-[#8E8E98] font-light leading-relaxed mb-8 max-w-xl">
-          A woman-owned collective inside Sola Salon Studios. Every artist runs her own chair,
-          her own craft, her own clientele — call or text your stylist directly.
+        <p className="text-base md:text-lg text-[#B6B6C0] font-light leading-relaxed mb-8 max-w-xl">
+          A woman-owned collective inside Sola Salon Studios. Every artist runs her own chair, her own craft, her own
+          clientele — call or text your stylist directly.
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-[#25252B] border border-[#25252B]">
-          {TEAM_PHONES.map(([name, num, tel, role]) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
+          {TEAM_PHONES.map(([name, num, tel]) => (
             <a
               key={name}
               data-testid={`artist-${name.toLowerCase()}`}
               href={tel}
-              className={`group p-6 flex items-center justify-between transition-colors ${
-                role
-                  ? "bg-[#18181C] border border-[#D4A373]/50 hover:bg-[#25252B]"
-                  : "bg-[#0E0E10] hover:bg-[#18181C]"
-              }`}
+              aria-label={`Call ${name} at ${num}`}
+              className="group p-6 flex items-center justify-between border border-[#2E2E36] transition-colors hover:border-[#D4A373] hover:bg-[#15151A]"
             >
-              <div>
-                <div className="text-white font-bold uppercase tracking-wide flex items-center gap-2">
-                  {name}
-                  {role && (
-                    <span className="text-[10px] font-mono tracking-[0.2em] text-[#D4A373] border border-[#D4A373]/50 px-2 py-0.5">
-                      {role}
-                    </span>
-                  )}
-                </div>
-                <div className="text-xs font-mono text-[#8E8E98] mt-1 group-hover:text-[#D4A373] transition-colors">
-                  {num}
-                </div>
-              </div>
-              <ArrowUpRight size={18} className="text-[#D4A373] opacity-0 group-hover:opacity-100 transition-opacity" />
+              <span>
+                <span className="text-white font-bold uppercase tracking-wide block">{name}</span>
+                <span className="block text-xs font-mono text-[#B6B6C0] mt-1 group-hover:text-[#D4A373] transition-colors">{num}</span>
+              </span>
+              <ArrowUpRight size={18} className="text-[#D4A373] opacity-0 group-hover:opacity-100 transition-opacity" aria-hidden="true" />
             </a>
           ))}
         </div>
@@ -499,43 +718,89 @@ const Artists = () => (
   </section>
 );
 
+/* ---------------- Service area (local SEO) ---------------- */
+const ServiceArea = () => (
+  <section id="areas" data-testid="service-area-section" aria-labelledby="areas-heading" className="py-24 px-6 border-b border-[#2E2E36]">
+    <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12">
+      <Reveal className="lg:col-span-5">
+        <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#D4A373]">06 / Service Area</span>
+        <h2 id="areas-heading" className="font-manifesto text-4xl sm:text-5xl uppercase text-white mt-2 mb-6">
+          Serving Ocean County
+        </h2>
+        <p className="text-base text-[#B6B6C0] font-light leading-relaxed max-w-lg">
+          We sit on Hooper Ave in Toms River, minutes from Route 37 and the Garden State Parkway — an easy drive from Brick,
+          Beachwood, Bayville, Lakewood, Island Heights, Seaside Heights, Point Pleasant, Jackson, Forked River and
+          Manahawkin. Clients come from all over the Jersey Shore for colour and bridal work they can’t get closer to home.
+        </p>
+      </Reveal>
+      <Reveal delay={150} className="lg:col-span-7">
+        <ul data-testid="towns-list" className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 list-none">
+          {TOWNS.map(([town, drive]) => (
+            <li key={town} className="border border-[#2E2E36] p-5 hover:border-[#D4A373] transition-colors">
+              <span className="block text-white font-bold uppercase text-sm tracking-wide">{town}</span>
+              <span className="block text-[11px] font-mono text-[#B6B6C0] mt-1">{drive} away</span>
+            </li>
+          ))}
+          <li className="border border-[#D4A373]/40 bg-[#15151A] p-5 col-span-2 flex items-center">
+            <BookLink
+              testId="areas-book-btn"
+              label="Book online from anywhere in Ocean County"
+              className="text-xs font-mono uppercase tracking-[0.2em] text-[#D4A373] hover:text-white transition-colors flex items-center gap-2"
+            >
+              Booking online takes a minute <ArrowUpRight size={14} aria-hidden="true" />
+            </BookLink>
+          </li>
+        </ul>
+      </Reveal>
+    </div>
+  </section>
+);
+
 /* ---------------- Location ---------------- */
 const Location = () => (
-  <section id="location" data-testid="location-section" className="py-24 px-6 border-b border-[#25252B]">
+  <section id="location" data-testid="location-section" aria-labelledby="location-heading" className="py-24 px-6 border-b border-[#2E2E36]">
     <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12">
       <div className="lg:col-span-5">
         <Reveal>
-          <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#D4A373]">05 / Studio Location</span>
-          <h2 className="font-manifesto text-4xl sm:text-5xl uppercase text-white mt-2 mb-6">Toms River Studio</h2>
-          <div className="space-y-4 text-sm text-[#8E8E98]">
-            <p data-testid="studio-address" className="text-white font-medium text-base">
+          <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#D4A373]">07 / Studio Location</span>
+          <h2 id="location-heading" className="font-manifesto text-4xl sm:text-5xl uppercase text-white mt-2 mb-6">
+            Toms River Studio
+          </h2>
+          <div className="space-y-4 text-sm text-[#B6B6C0]">
+            <address data-testid="studio-address" className="text-white font-medium text-base not-italic">
               1201 Hooper Ave, Sola Salon Studios, Suite 8 &amp; 9<br />
               Toms River, NJ 08753
-            </p>
+            </address>
             <p>Private suite booked exclusively per guest. One-on-one undivided focus, every appointment.</p>
 
-            <div className="pt-4 border-t border-[#25252B] font-mono text-xs space-y-2" data-testid="studio-hours">
+            <div className="pt-4 border-t border-[#2E2E36] font-mono text-xs space-y-2" data-testid="studio-hours">
               {HOURS.map(([day, time]) => (
                 <div key={day} className="flex justify-between">
-                  <span className="uppercase text-[#8E8E98]">{day}</span>
-                  <span className={time === "Closed" ? "text-[#8E8E98]" : "text-white"}>{time}</span>
+                  <span className="uppercase text-[#B6B6C0]">{day}</span>
+                  <span className={time === "Closed" ? "text-[#B6B6C0]" : "text-white"}>{time}</span>
                 </div>
               ))}
             </div>
 
-            <div className="pt-4 border-t border-[#25252B] font-mono text-xs space-y-2">
+            <div className="pt-4 border-t border-[#2E2E36] font-mono text-xs space-y-2">
               <div className="text-[#D4A373] uppercase tracking-widest mb-2">Call or text your stylist directly</div>
               <a data-testid="location-main-phone" href={PHONE_TEL} className="flex justify-between items-center group">
-                <span className="uppercase text-[#8E8E98]">Studio line</span>
+                <span className="uppercase text-[#B6B6C0]">Studio line</span>
                 <span className="text-white group-hover:text-[#D4A373] transition-colors">{PHONE_DISPLAY}</span>
               </a>
+              <a data-testid="location-email" href={EMAIL_HREF} className="flex justify-between items-center gap-4 group">
+                <span className="uppercase text-[#B6B6C0]">Email</span>
+                <span className="text-white group-hover:text-[#D4A373] transition-colors break-all text-right">{EMAIL}</span>
+              </a>
               <a data-testid="location-all-artists" href="#artists" className="flex justify-between items-center group">
-                <span className="uppercase text-[#8E8E98]">All four stylists</span>
-                <span className="text-white group-hover:text-[#D4A373] transition-colors flex items-center gap-1">See Artists <ArrowUpRight size={12} /></span>
+                <span className="uppercase text-[#B6B6C0]">All four stylists</span>
+                <span className="text-white group-hover:text-[#D4A373] transition-colors flex items-center gap-1">
+                  See Artists <ArrowUpRight size={12} aria-hidden="true" />
+                </span>
               </a>
             </div>
 
-            <div className="pt-4 border-t border-[#25252B]">
+            <div className="pt-4 border-t border-[#2E2E36]">
               <a
                 data-testid="facebook-link"
                 href="https://www.facebook.com/charmedbeautynj"
@@ -543,7 +808,7 @@ const Location = () => (
                 rel="noopener noreferrer"
                 className="flex items-center space-x-2 text-xs font-mono uppercase text-white hover:text-[#D4A373] transition-colors"
               >
-                <Facebook size={14} className="text-[#D4A373]" />
+                <Facebook size={14} className="text-[#D4A373]" aria-hidden="true" />
                 <span>Facebook — @charmedbeautynj</span>
               </a>
             </div>
@@ -553,10 +818,10 @@ const Location = () => (
 
       <div className="lg:col-span-7">
         <Reveal delay={150}>
-          <div className="relative aspect-[16/9] w-full border border-[#25252B] overflow-hidden group hover:border-[#D4A373] transition-colors">
+          <div className="relative aspect-[16/9] w-full border border-[#2E2E36] overflow-hidden group hover:border-[#D4A373] transition-colors">
             <iframe
               data-testid="google-map-embed"
-              title="Charmed Beauty 9 & 18 — 1201 Hooper Ave, Toms River, NJ 08753"
+              title="Map of Charmed Beauty 9 & 18 at 1201 Hooper Ave, Toms River, NJ 08753"
               src="https://maps.google.com/maps?q=Charmed%20Beauty%209%20%26%2018%2C%201201%20Hooper%20Ave%2C%20Toms%20River%2C%20NJ%2008753&t=&z=15&ie=UTF8&iwloc=&output=embed"
               className="map-dark absolute inset-0 w-full h-full"
               loading="lazy"
@@ -564,23 +829,23 @@ const Location = () => (
               allowFullScreen
             ></iframe>
             <div className="absolute top-4 left-4 right-4 flex justify-between items-center text-xs font-mono text-[#D4A373] pointer-events-none">
-              <span className="bg-black/80 px-2 py-1 border border-[#25252B]">TOMS RIVER, NJ</span>
-              <span className="bg-black/80 px-2 py-1 border border-[#25252B]">ZIP: 08753</span>
+              <span className="bg-black/80 px-2 py-1 border border-[#2E2E36]">TOMS RIVER, NJ</span>
+              <span className="bg-black/80 px-2 py-1 border border-[#2E2E36]">ZIP: 08753</span>
             </div>
-            <div className="absolute bottom-4 left-4 bg-black/90 p-4 border border-[#25252B] max-w-sm pointer-events-none">
+            <div className="absolute bottom-4 left-4 bg-black/90 p-4 border border-[#2E2E36] max-w-sm pointer-events-none">
               <span className="text-xs font-bold text-white uppercase flex items-center gap-2">
-                <MapPin size={12} className="text-[#D4A373]" /> Charmed Beauty 9 &amp; 18
+                <MapPin size={12} className="text-[#D4A373]" aria-hidden="true" /> Charmed Beauty 9 &amp; 18
               </span>
-              <p className="text-[11px] text-[#8E8E98] mt-1">1201 Hooper Ave, Suite 8 &amp; 9</p>
+              <p className="text-[11px] text-[#B6B6C0] mt-1">1201 Hooper Ave, Suite 8 &amp; 9</p>
             </div>
             <a
               data-testid="map-link"
               href={MAPS_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="absolute bottom-4 right-4 bg-black/90 px-3 py-2 border border-[#25252B] text-xs font-mono uppercase text-[#8E8E98] hover:text-[#D4A373] hover:border-[#D4A373] transition-colors flex items-center gap-1"
+              className="absolute bottom-4 right-4 bg-black/90 px-3 py-2 border border-[#2E2E36] text-xs font-mono uppercase text-[#B6B6C0] hover:text-[#D4A373] hover:border-[#D4A373] transition-colors flex items-center gap-1"
             >
-              Open in Maps <ArrowUpRight size={14} />
+              Open in Maps <ArrowUpRight size={14} aria-hidden="true" />
             </a>
           </div>
         </Reveal>
@@ -591,34 +856,36 @@ const Location = () => (
 
 /* ---------------- Final CTA ---------------- */
 const FinalCTA = () => (
-  <section id="contact" data-testid="final-cta-section" className="py-28 px-6 bg-[#080809] text-center relative overflow-hidden">
-    <div className="hero-glow -bottom-1/3 -left-1/4" aria-hidden="true"></div>
+  <section id="contact" data-testid="final-cta-section" aria-labelledby="cta-heading" className="py-28 px-6 bg-[#000000] text-center relative overflow-hidden">
     <div className="max-w-3xl mx-auto relative">
       <Reveal>
         <span className="text-xs font-mono uppercase tracking-[0.3em] text-[#D4A373]">Ready for Your Booking</span>
-        <h2 className="font-manifesto text-5xl sm:text-7xl uppercase text-white mt-3 mb-6">
+        <h2 id="cta-heading" className="font-manifesto text-5xl sm:text-7xl uppercase text-white mt-3 mb-6">
           Reserve Your Slot Now
         </h2>
-        <p className="text-[#8E8E98] text-base mb-10 max-w-xl mx-auto">
-          Live online booking powered by GlossGenius. Real-time availability for color, cuts,
-          treatments, and occasion styling.
+        <p className="text-[#B6B6C0] text-base mb-10 max-w-xl mx-auto">
+          Real-time availability for colour, cuts, treatments and occasion styling — book in under a minute.
         </p>
         <div className="max-w-md mx-auto">
           <BookLink
             testId="final-book-btn"
+            label="Book an appointment online"
             className="block w-full py-5 bg-[#D4A373] text-black font-manifesto text-2xl uppercase tracking-wider hover:bg-white transition-colors shadow-2xl"
           >
             Book Now
           </BookLink>
-          <div className="mt-6 flex items-center justify-center space-x-6 text-xs font-mono text-[#8E8E98]">
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-xs font-mono text-[#B6B6C0]">
             <a data-testid="cta-call-link" href={PHONE_TEL} className="flex items-center gap-2 hover:text-white transition-colors">
-              <Phone size={12} /> {PHONE_DISPLAY}
+              <Phone size={12} aria-hidden="true" /> {PHONE_DISPLAY}
             </a>
             <a data-testid="cta-text-link" href={PHONE_SMS} className="flex items-center gap-2 hover:text-white transition-colors">
-              <MessageSquare size={12} /> Text us
+              <MessageSquare size={12} aria-hidden="true" /> Text us
+            </a>
+            <a data-testid="cta-email-link" href={EMAIL_HREF} className="flex items-center gap-2 hover:text-white transition-colors break-all">
+              <Mail size={12} aria-hidden="true" /> {EMAIL}
             </a>
           </div>
-          <p className="mt-6 text-[11px] font-mono text-[#8E8E98]/70 leading-relaxed">
+          <p className="mt-6 text-[11px] font-mono text-[#B6B6C0]/80 leading-relaxed">
             50% fee for no-shows or cancellations within 24 hours • 3.5% card processing fee
           </p>
         </div>
@@ -629,27 +896,22 @@ const FinalCTA = () => (
 
 /* ---------------- Footer ---------------- */
 const Footer = () => (
-  <footer className="py-10 px-6 border-t border-[#25252B] bg-[#080809]">
-    <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-mono text-[#8E8E98]">
+  <footer className="py-10 px-6 border-t border-[#2E2E36] bg-[#000000]">
+    <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-mono text-[#B6B6C0]">
       <div className="uppercase text-white font-bold">Charmed Beauty 9 &amp; 18 • Toms River, NJ</div>
-      <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2">
+      <nav aria-label="Footer navigation" className="flex flex-wrap justify-center gap-x-6 gap-y-2">
         <a href="#hero" className="hover:text-white transition-colors">Top</a>
-        <a href="#manifesto" className="hover:text-white transition-colors">Manifesto</a>
-        <a href="#offerings" className="hover:text-white transition-colors">Offerings</a>
-        <a href="#standards" className="hover:text-white transition-colors">Standards</a>
+        <a href="#work" className="hover:text-white transition-colors">The Work</a>
+        <a href="#menu" className="hover:text-white transition-colors">Menu</a>
+        <a href="#reviews" className="hover:text-white transition-colors">Reviews</a>
         <a href="#artists" className="hover:text-white transition-colors">Artists</a>
-        <a href="#location" className="hover:text-white transition-colors">Location</a>
-        <BookLink testId="footer-book-link" className="hover:text-white transition-colors">Book</BookLink>
+        <a href="#location" className="hover:text-white transition-colors">Visit</a>
+        <BookLink testId="footer-book-link" label="Book online" className="hover:text-white transition-colors">Book</BookLink>
+        <a data-testid="footer-email" href={EMAIL_HREF} className="hover:text-white transition-colors">Email Us</a>
       </nav>
       <div className="flex items-center gap-4">
         <span>Woman-Owned Atelier</span>
-        <a
-          data-testid="footer-mo-studio"
-          href="https://mozeid.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:text-[#D4A373] transition-colors"
-        >
+        <a data-testid="footer-mo-studio" href="https://mozeid.com/" target="_blank" rel="noopener noreferrer" className="hover:text-[#D4A373] transition-colors">
           Designed by Mo Studio
         </a>
       </div>
@@ -661,24 +923,28 @@ const Footer = () => (
 const FloatingBook = () => (
   <BookLink
     testId="floating-book-btn"
+    label="Book an appointment online"
     className="float-book fixed bottom-6 right-6 z-50 px-6 py-4 bg-[#D4A373] text-black font-manifesto uppercase tracking-wider text-base hover:bg-white transition-colors flex items-center gap-2"
   >
-    Book Now <ArrowUpRight size={16} />
+    Book Now <ArrowUpRight size={16} aria-hidden="true" />
   </BookLink>
 );
 
 function App() {
   return (
-    <div className="grain bg-[#0E0E10] text-[#ECECEC] antialiased min-h-screen font-sans">
+    <div className="bg-[#0A0A0C] text-[#ECECEC] antialiased min-h-screen font-sans">
+      <a href="#main" className="skip-link">Skip to main content</a>
       <Header />
-      <main>
+      <main id="main">
         <Hero />
         <Manifesto />
         <Marquee />
+        <Gallery />
         <Interlude />
-        <Offerings />
-        <Standards />
+        <Menu />
+        <Reviews />
         <Artists />
+        <ServiceArea />
         <Location />
         <FinalCTA />
       </main>
