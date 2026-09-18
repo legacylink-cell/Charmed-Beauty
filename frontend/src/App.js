@@ -239,8 +239,6 @@ const Header = () => (
 );
 
 /* ---------------- Hero ---------------- */
-const HERO_STRIP = [2, 11, 21];
-
 const Hero = () => (
   <section
     id="hero"
@@ -251,20 +249,16 @@ const Hero = () => (
     <div className="hero-grid" aria-hidden="true"></div>
     <div className="hero-scan" aria-hidden="true"></div>
 
-    <div className="hero-strip hidden lg:flex" aria-hidden="true">
-      {HERO_STRIP.map((n, i) => (
-        <img
-          key={n}
-          src={`/images/gallery/work-${String(n).padStart(2, "0")}.webp`}
-          alt=""
-          width="444"
-          height="444"
-          loading="lazy"
-          decoding="async"
-          className="hero-strip-img"
-          style={{ animationDelay: `${0.6 + i * 0.18}s` }}
-        />
-      ))}
+    <div className="hero-photo hidden md:block" aria-hidden="true">
+      <img
+        src="https://images.unsplash.com/photo-1546704972-a85cd1688ac6?q=80&w=1100&auto=format&fit=crop"
+        alt=""
+        width="1100"
+        height="1650"
+        fetchpriority="high"
+        decoding="async"
+        className="hero-photo-img"
+      />
     </div>
 
     <span className="hero-watermark hidden xl:block" aria-hidden="true">9&amp;18</span>

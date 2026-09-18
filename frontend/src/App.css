@@ -196,7 +196,7 @@ button:focus-visible {
   }
   .hero-in,
   .hero-scan,
-  .hero-strip-img,
+  .hero-photo-img,
   .marquee-track,
   .menu-panel,
   .float-book,
@@ -207,8 +207,8 @@ button:focus-visible {
   .hero-in {
     opacity: 1;
   }
-  .hero-strip-img {
-    opacity: 0.42;
+  .hero-photo-img {
+    opacity: 0.55;
   }
   .reveal {
     opacity: 1;
@@ -249,33 +249,40 @@ button:focus-visible {
   pointer-events: none;
 }
 
-.hero-strip {
+.hero-photo {
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
-  width: 26vw;
-  max-width: 420px;
-  flex-direction: column;
-  gap: 2px;
+  width: 46vw;
+  max-width: 760px;
+  overflow: hidden;
   pointer-events: none;
-  mask-image: linear-gradient(to left, #000 35%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to left, #000 35%, transparent 100%);
+  mask-image: linear-gradient(to left, #000 20%, rgba(0, 0, 0, 0.45) 60%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to left, #000 20%, rgba(0, 0, 0, 0.45) 60%, transparent 100%);
 }
 
-@keyframes stripIn {
-  from { opacity: 0; transform: scale(1.06); }
-  to { opacity: 0.42; transform: scale(1); }
+@keyframes photoIn {
+  from { opacity: 0; transform: scale(1.08); }
+  to { opacity: 0.55; transform: scale(1); }
 }
-.hero-strip-img {
-  flex: 1;
+.hero-photo-img {
   width: 100%;
-  height: 33.333%;
+  height: 100%;
   object-fit: cover;
+  object-position: 42% center;
   opacity: 0;
-  filter: grayscale(0.55) contrast(1.05);
-  border-left: 1px solid rgba(212, 163, 115, 0.35);
-  animation: stripIn 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  filter: grayscale(0.75) contrast(1.12) brightness(0.9);
+  animation: photoIn 1.8s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards;
+}
+.hero-photo::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(212, 163, 115, 0.55), transparent);
 }
 
 .hero-watermark {

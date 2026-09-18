@@ -50,7 +50,7 @@ Luxury beauty salon website for Charmed Beauty 9 & 18 (woman-owned studio, Toms 
 - Desktop header nav tidied (labels only, no numbers) to fit 7 entries without overlapping the brand.
 
 ### 2026-09-18 (hero background modernisation + gift card contact)
-- Hero background: crisp copper hairline grid (masked fade), animated copper scan line, right-edge vertical strip of 3 desaturated client-work photos with copper hairlines (lg+), outlined "9&18" stroke watermark (xl+), and the "Hair Salon • Toms River, NJ 08753" kicker restyled as a bordered pill with a pulsing dot. All motion respects prefers-reduced-motion.
+- Hero background: crisp copper hairline grid (masked fade), animated copper scan line, a single HD editorial hair image on the right edge (Unsplash photo-1546704972, desaturated + masked to black; the owner's own photos were too low-res for hero use), outlined "9&18" stroke watermark (xl+), and the kicker restyled as a bordered pill with a pulsing dot. Hidden below md. All motion respects prefers-reduced-motion.
 - Gift card CTAs now use Joanne's line: (732) 330-4850 for both call and pre-filled text; copy updated to "arranged directly with Joanne".
 
 ## Testing- /app/test_reports/iteration_1.json — 9/11 pass; 2 defects (team.webp 404, 13px mobile header overflow) → both fixed
