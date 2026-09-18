@@ -66,6 +66,11 @@ Luxury beauty salon website for Charmed Beauty 9 & 18 (woman-owned studio, Toms 
 - Hero "9&18" watermark made clearly visible (2px copper stroke, faint fill, z-index above hero photo, shown from lg up).
 - Verified by testing agent: iteration_5.json, 100%, zero em dashes, auto-scroll and watermark all confirmed.
 
+### 2026-09-18 (layout fixes)
+- Hero "9&18" watermark shrunk and re-anchored bottom-right so it no longer runs under the hero CTA caption (verified iteration_6).
+- Review cards forced to equal heights (items-stretch + h-full + min-h-240 with attribution pinned bottom).
+- Floating BOOK NOW re-implemented with a scroll/rAF rect check so it is reliably hidden over the hero, final CTA and footer on desktop and mobile (verified iteration_7, 100%).
+
 ## Testing- /app/test_reports/iteration_1.json — 9/11 pass; 2 defects (team.webp 404, 13px mobile header overflow) → both fixed
 - /app/test_reports/iteration_2.json — **100% (5/5)**: team photo, zero mobile overflow, menu tabs (8/13/3/1), 11 booking CTAs, gallery + lightbox, email links, map, no console errors
 
