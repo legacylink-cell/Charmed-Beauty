@@ -1,0 +1,44 @@
+{
+  "summary": "Verified the three mobile bug fixes reported by user against the deployed preview at 390x844, 430x932 and 1440x900. All three bugs are fixed and no regressions detected.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "bug_verification": {
+    "bug1_map_overlap": {
+      "status": "FIXED",
+      "evidence": "At 390x844: map iframe bbox (y=586.4, h=212.5 -> ends 798.9) and map-link bbox (y=880.5, h=42) DO NOT intersect. At 430x932: iframe ends 851.6, link starts 914.9 -> no intersection. map-link href=https://www.google.com/maps/search/?api=1&query=1201+Hooper+Ave... target=_blank correct. Address card visible above map."
+    },
+    "bug2_floating_cta_footer": {
+      "status": "FIXED",
+      "evidence": "At 390x844 on fresh load: scrollY=0 -> .float-wrap opacity=0 visibility=hidden (hidden). scrollY=300 (<70% of 844=590) -> still hidden. scrollY=800 -> is-visible class applied opacity=1. Scrolled to bottom (final CTA / #contact / footer visible) -> is-visible class removed, wrap fades out. footer-book-link, footer-email, footer-mo-studio all report 'clickable' via elementFromPoint (not obscured by floating btn). Final CTA headline readable."
+    },
+    "bug3_gift_ctas": {
+      "status": "FIXED",
+      "evidence": "At 390x844 the three gift CTAs stack vertically with identical widths (342px each), stacked ys=[245.9, 305.9, 367.9]. Hrefs: gift-text-btn=sms:+17323304850?body=..., gift-call-btn=tel:+17323304850, gift-email-btn=mailto:Charmedbeautynj@gmail.com?subject=Gift%20Card%20Request. No overflow. At 1440x900 the three buttons sit in a single row (y ~590 all three)."
+    }
+  },
+  "regression": {
+    "horizontal_overflow_390": "none (scrollWidth=390 == innerWidth=390 top and after full scroll)",
+    "horizontal_overflow_1440": "none (scrollWidth=1440 == innerWidth=1440)",
+    "menu_tabs": "cuts/color/treatments/occasion tabs all clickable and swap panel",
+    "booking_ctas": "9 anchors on desktop, all pointing to https://charmedbeauty918.glossgenius.com/booking-flow",
+    "console_errors": "Only pre-existing React warning: 'Invalid DOM property fetchpriority. Did you mean fetchPriority?' (image tag attribute casing) - non-blocking, not new"
+  },
+  "test_report_links": [],
+  "action_items": [
+    "OPTIONAL (minor): rename `fetchpriority` attribute to React's `fetchPriority` on <img> tags to silence 4 console warnings"
+  ],
+  "critical_code_review_comments": [
+    "FloatingBook uses both IntersectionObserver on #contact/footer and a scroll listener - fine, correctly de-duped by state setter; unobserving in cleanup present.",
+    "Minor: React warns about `fetchpriority` prop casing on preload/img elements."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a", "frontend": "100%"},
+  "seed_data_creation": "none",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "All three user-reported mobile bugs (map overlap, floating BOOK NOW covering footer, gift CTA ragged widths) are verified fixed at 390x844 and 430x932. Desktop regression at 1440x900 clean. Only lingering item is pre-existing React fetchpriority casing warning."
+}

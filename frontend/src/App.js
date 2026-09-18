@@ -244,7 +244,7 @@ const Hero = () => (
     id="hero"
     data-testid="hero-section"
     aria-labelledby="hero-headline"
-    className="relative overflow-hidden py-28 md:py-40 px-6 border-b border-[#2E2E36] min-h-[92vh] flex items-center"
+    className="relative overflow-hidden pt-10 pb-16 md:py-40 px-6 border-b border-[#2E2E36] md:min-h-[92vh] flex items-start md:items-center"
   >
     <div className="hero-grid" aria-hidden="true"></div>
     <div className="hero-scan" aria-hidden="true"></div>
@@ -265,8 +265,8 @@ const Hero = () => (
 
     <div className="max-w-7xl mx-auto w-full relative z-10">
       <div className="max-w-5xl">
-        <p data-testid="hero-tagline" className="hero-in d1 inline-flex items-center gap-3 text-xs font-mono uppercase tracking-[0.25em] text-[#D4A373] mb-6 border border-[#D4A373]/30 px-4 py-2">
-          <span className="w-1.5 h-1.5 bg-[#D4A373] animate-pulse" aria-hidden="true"></span>
+        <p data-testid="hero-tagline" className="hero-in d1 inline-flex items-center gap-2 sm:gap-3 text-[10px] sm:text-xs font-mono uppercase tracking-[0.12em] sm:tracking-[0.25em] text-[#D4A373] mb-6 border border-[#D4A373]/30 px-3 sm:px-4 py-2">
+          <span className="w-1.5 h-1.5 bg-[#D4A373] shrink-0 animate-pulse" aria-hidden="true"></span>
           Hair Salon • Toms River, NJ 08753
         </p>
         <h1
@@ -1074,24 +1074,26 @@ const FloatingBook = () => {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    let nearEnd = false;
-    const targets = [document.getElementById("contact"), document.querySelector("footer")].filter(Boolean);
+    let nearEnd = true;
+    const blocked = new Map();
+    const targets = [
+      document.getElementById("hero"),
+      document.getElementById("contact"),
+      document.querySelector("footer"),
+    ].filter(Boolean);
     const io = new IntersectionObserver(
       (entries) => {
-        nearEnd = entries.some((e) => e.isIntersecting);
-        setShow(window.scrollY > window.innerHeight * 0.7 && !nearEnd);
+        entries.forEach((e) => {
+          blocked.set(e.target, e.isIntersecting);
+        });
+        nearEnd = [...blocked.values()].some(Boolean);
+        setShow(!nearEnd);
       },
       { threshold: 0.01 }
     );
     targets.forEach((t) => io.observe(t));
 
-    const onScroll = () => setShow(window.scrollY > window.innerHeight * 0.7 && !nearEnd);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => {
-      io.disconnect();
-      window.removeEventListener("scroll", onScroll);
-    };
+    return () => io.disconnect();
   }, []);
 
   return (
