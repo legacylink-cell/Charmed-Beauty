@@ -35,8 +35,14 @@ Luxury beauty salon website for Charmed Beauty 9 & 18 (woman-owned studio, Toms 
 - Mobile responsive; all interactive elements have data-testid
 
 ## Pending / Needs From User
-- Instagram URL and Facebook URL (placeholders shown on page)
+- Instagram URL (placeholder still shown on page)
 - Confirm hair-menu interpretation (brief said nail/lash; real GlossGenius menu is hair — built with real data)
+
+## Updates (2026-09-18, later)
+- Added real studio photo to the cinematic media frame (/images/studio.png)
+- Added "04 / The Artists" section with real team photo (/images/team.png) + 4 stylist call/text cards
+- Footer: "Designed by Mo Studio" → https://mozeid.com/ (marketing credit, per user)
+- Facebook wired: https://www.facebook.com/charmedbeautynj
 
 ## Backlog
 - P1: Wire real Instagram/Facebook URLs once provided

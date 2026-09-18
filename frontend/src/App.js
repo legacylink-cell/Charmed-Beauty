@@ -156,7 +156,8 @@ const Header = () => (
         <a data-testid="nav-manifesto" href="#manifesto" className="hover:text-white transition-colors">01 / Manifesto</a>
         <a data-testid="nav-offerings" href="#offerings" className="hover:text-white transition-colors">02 / Offerings</a>
         <a data-testid="nav-standards" href="#standards" className="hover:text-white transition-colors">03 / Standards</a>
-        <a data-testid="nav-location" href="#location" className="hover:text-white transition-colors">04 / Location</a>
+        <a data-testid="nav-artists" href="#artists" className="hover:text-white transition-colors">04 / Artists</a>
+        <a data-testid="nav-location" href="#location" className="hover:text-white transition-colors">05 / Location</a>
       </nav>
       <BookLink
         testId="header-book-btn"
@@ -289,20 +290,20 @@ const MediaFrame = () => (
     <Reveal>
       <div
         data-testid="craft-frame"
-        className="max-w-7xl mx-auto aspect-[21/9] w-full border border-[#25252B] relative overflow-hidden flex flex-col justify-end"
+        className="max-w-7xl mx-auto aspect-[4/5] sm:aspect-[16/10] w-full border border-[#25252B] relative overflow-hidden flex flex-col justify-end"
       >
         <img
-          src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?q=80&w=2000&auto=format&fit=crop"
-          alt="Stylist finishing dimensional color work in a dark studio"
-          className="frame-img absolute inset-0 w-full h-full object-cover opacity-50"
+          src="/images/studio.png"
+          alt="Inside the private Charmed Beauty suite — styling chair, mirror and chandelier"
+          className="frame-img absolute inset-0 w-full h-full object-cover opacity-80"
           loading="lazy"
         />
-        <div className="absolute inset-0 bg-[#2D2218]/30 mix-blend-multiply"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-[#080809] via-[#080809]/40 to-transparent"></div>
+        <div className="absolute inset-0 bg-[#2D2218]/20 mix-blend-multiply"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#080809] via-[#080809]/20 to-transparent"></div>
         <div className="relative max-w-md bg-black/80 backdrop-blur-md p-4 border border-[#25252B] m-8">
-          <span className="text-xs font-mono text-[#D4A373] uppercase">Craft Standard</span>
+          <span className="text-xs font-mono text-[#D4A373] uppercase">The Actual Studio</span>
           <p className="text-sm text-white font-medium mt-1">
-            Hand-finished in private Toms River suites
+            Private suite 8 &amp; 9, Sola Salon Studios, Toms River
           </p>
         </div>
       </div>
@@ -410,13 +411,64 @@ const Standards = () => (
   </section>
 );
 
+/* ---------------- The Artists (team photo) ---------------- */
+const Artists = () => (
+  <section id="artists" data-testid="artists-section" className="py-24 px-6 border-b border-[#25252B]">
+    <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      <Reveal className="lg:col-span-5 order-2 lg:order-1">
+        <div className="relative border border-[#25252B] overflow-hidden group">
+          <img
+            data-testid="team-photo"
+            src="/images/team.png"
+            alt="The Charmed Beauty 9 & 18 stylists at Sola Salon Studios"
+            className="w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#080809]/80 via-transparent to-transparent"></div>
+          <div className="absolute bottom-0 left-0 p-4 bg-black/80 backdrop-blur-md border border-[#25252B] m-4">
+            <span className="text-xs font-mono text-[#D4A373] uppercase">The Hands Behind The Work</span>
+          </div>
+        </div>
+      </Reveal>
+      <Reveal delay={150} className="lg:col-span-7 order-1 lg:order-2">
+        <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#D4A373]">04 / The Artists</span>
+        <h2 className="font-manifesto text-4xl sm:text-6xl uppercase text-white mt-2 mb-6">
+          Four Stylists.<br />One Standard.
+        </h2>
+        <p className="text-base md:text-lg text-[#8E8E98] font-light leading-relaxed mb-8 max-w-xl">
+          A woman-owned collective inside Sola Salon Studios. Every artist runs her own chair,
+          her own craft, her own clientele — call or text your stylist directly.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-[#25252B] border border-[#25252B]">
+          {TEAM_PHONES.map(([name, num, tel]) => (
+            <a
+              key={name}
+              data-testid={`artist-${name.toLowerCase()}`}
+              href={tel}
+              className="group bg-[#0E0E10] p-6 flex items-center justify-between hover:bg-[#18181C] transition-colors"
+            >
+              <div>
+                <div className="text-white font-bold uppercase tracking-wide">{name}</div>
+                <div className="text-xs font-mono text-[#8E8E98] mt-1 group-hover:text-[#D4A373] transition-colors">
+                  {num}
+                </div>
+              </div>
+              <ArrowUpRight size={18} className="text-[#D4A373] opacity-0 group-hover:opacity-100 transition-opacity" />
+            </a>
+          ))}
+        </div>
+      </Reveal>
+    </div>
+  </section>
+);
+
 /* ---------------- Location ---------------- */
 const Location = () => (
   <section id="location" data-testid="location-section" className="py-24 px-6 border-b border-[#25252B]">
     <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12">
       <div className="lg:col-span-5">
         <Reveal>
-          <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#D4A373]">04 / Studio Location</span>
+          <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#D4A373]">05 / Studio Location</span>
           <h2 className="font-manifesto text-4xl sm:text-5xl uppercase text-white mt-2 mb-6">Toms River Studio</h2>
           <div className="space-y-4 text-sm text-[#8E8E98]">
             <p data-testid="studio-address" className="text-white font-medium text-base">
@@ -435,15 +487,15 @@ const Location = () => (
             </div>
 
             <div className="pt-4 border-t border-[#25252B] font-mono text-xs space-y-2">
-              <div className="text-[#D4A373] uppercase tracking-widest mb-2">Direct lines — call or text</div>
-              {TEAM_PHONES.map(([name, num, tel]) => (
-                <div key={name} className="flex justify-between items-center">
-                  <span className="uppercase text-[#8E8E98]">{name}</span>
-                  <a data-testid={`phone-${name.toLowerCase()}`} href={tel} className="text-white hover:text-[#D4A373] transition-colors">
-                    {num}
-                  </a>
-                </div>
-              ))}
+              <div className="text-[#D4A373] uppercase tracking-widest mb-2">Call or text your stylist directly</div>
+              <a data-testid="location-main-phone" href={PHONE_TEL} className="flex justify-between items-center group">
+                <span className="uppercase text-[#8E8E98]">Main line — Andrea</span>
+                <span className="text-white group-hover:text-[#D4A373] transition-colors">{PHONE_DISPLAY}</span>
+              </a>
+              <a data-testid="location-all-artists" href="#artists" className="flex justify-between items-center group">
+                <span className="uppercase text-[#8E8E98]">All four stylists</span>
+                <span className="text-white group-hover:text-[#D4A373] transition-colors flex items-center gap-1">See Artists <ArrowUpRight size={12} /></span>
+              </a>
             </div>
 
             <div className="pt-4 border-t border-[#25252B] flex items-center space-x-6">
@@ -455,14 +507,16 @@ const Location = () => (
                 <Instagram size={14} className="text-[#D4A373]" />
                 <span>Instagram — link coming soon</span>
               </span>
-              <span
-                data-testid="facebook-placeholder"
-                className="flex items-center space-x-2 text-xs font-mono uppercase text-[#8E8E98]"
-                title="Facebook link coming soon"
+              <a
+                data-testid="facebook-link"
+                href="https://www.facebook.com/charmedbeautynj"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-2 text-xs font-mono uppercase text-white hover:text-[#D4A373] transition-colors"
               >
                 <Facebook size={14} className="text-[#D4A373]" />
-                <span>Facebook — link coming soon</span>
-              </span>
+                <span>Facebook — @charmedbeautynj</span>
+              </a>
             </div>
           </div>
         </Reveal>
@@ -547,10 +601,22 @@ const Footer = () => (
         <a href="#manifesto" className="hover:text-white transition-colors">Manifesto</a>
         <a href="#offerings" className="hover:text-white transition-colors">Offerings</a>
         <a href="#standards" className="hover:text-white transition-colors">Standards</a>
+        <a href="#artists" className="hover:text-white transition-colors">Artists</a>
         <a href="#location" className="hover:text-white transition-colors">Location</a>
         <BookLink testId="footer-book-link" className="hover:text-white transition-colors">Book</BookLink>
       </nav>
-      <div>Woman-Owned Atelier</div>
+      <div className="flex items-center gap-4">
+        <span>Woman-Owned Atelier</span>
+        <a
+          data-testid="footer-mo-studio"
+          href="https://mozeid.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:text-[#D4A373] transition-colors"
+        >
+          Designed by Mo Studio
+        </a>
+      </div>
     </div>
   </footer>
 );
@@ -576,6 +642,7 @@ function App() {
         <MediaFrame />
         <Offerings />
         <Standards />
+        <Artists />
         <Location />
         <FinalCTA />
       </main>
