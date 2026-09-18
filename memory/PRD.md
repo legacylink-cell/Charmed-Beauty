@@ -44,8 +44,12 @@ Luxury beauty salon website for Charmed Beauty 9 & 18 (woman-owned studio, Toms 
 - Mobile: horizontally scrollable quick-nav strip, compact header CTA (zero horizontal overflow at 390px), 2-col gallery, single-line price rows
 - "OWNER" badge removed from stylist cards (per user)
 
-## Testing
-- /app/test_reports/iteration_1.json — 9/11 pass; 2 defects (team.webp 404, 13px mobile header overflow) → both fixed
+### 2026-09-18 (gift cards)
+- New "04 / Gift Cards" section (between Full Menu and Reviews): editorial gift-card visual + amount chips ($50 / $95 / $165 / Any Amount) and three CTAs — Text To Buy (pre-filled SMS), Call, Email (pre-filled subject). Added to desktop nav, mobile quick-nav and footer; following sections renumbered 05–08.
+- **No online gift-card checkout exists today**: the GlossGenius `/gift-cards` path 404s for this studio and shop.saloninteractive.com/store/CharmedBeauty is a retail product store (no gift cards). CTAs therefore route to text/call/email. If the owner enables gift cards in GlossGenius, swap the CTA hrefs to that purchase URL.
+- Desktop header nav tidied (labels only, no numbers) to fit 7 entries without overlapping the brand.
+
+## Testing- /app/test_reports/iteration_1.json — 9/11 pass; 2 defects (team.webp 404, 13px mobile header overflow) → both fixed
 - /app/test_reports/iteration_2.json — **100% (5/5)**: team photo, zero mobile overflow, menu tabs (8/13/3/1), 11 booking CTAs, gallery + lightbox, email links, map, no console errors
 
 ## Backlog

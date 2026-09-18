@@ -216,6 +216,19 @@ button:focus-visible {
   }
 }
 
+/* ---- Gift card panel sheen ---- */
+.gift-card::before {
+  content: "";
+  position: absolute;
+  top: -40%;
+  left: -20%;
+  width: 60%;
+  height: 180%;
+  background: linear-gradient(100deg, transparent, rgba(212, 163, 115, 0.1), transparent);
+  transform: rotate(8deg);
+  pointer-events: none;
+}
+
 /* ---- Menu category panel reveal ---- */
 @keyframes panelIn {
   from { opacity: 0; transform: translateY(12px); }

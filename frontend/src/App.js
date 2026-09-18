@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "@/App.css";
-import { Phone, MessageSquare, Mail, Facebook, MapPin, ArrowUpRight, Star, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { Phone, MessageSquare, Mail, Gift, Facebook, MapPin, ArrowUpRight, Star, X, ChevronLeft, ChevronRight } from "lucide-react";
 
 const BOOKING_URL = "https://charmedbeauty918.glossgenius.com/booking-flow";
 const PHONE_DISPLAY = "(732) 955-9096";
@@ -192,22 +192,28 @@ const NAV = [
   ["01", "Manifesto", "#manifesto"],
   ["02", "The Work", "#work"],
   ["03", "Full Menu", "#menu"],
-  ["04", "Reviews", "#reviews"],
-  ["05", "Artists", "#artists"],
-  ["06", "Visit", "#location"],
+  ["04", "Gift Cards", "#gift-cards"],
+  ["05", "Reviews", "#reviews"],
+  ["06", "Artists", "#artists"],
+  ["07", "Visit", "#location"],
 ];
 
 const Header = () => (
   <header className="border-b border-[#2E2E36] bg-[#000000]/95 backdrop-blur-md sticky top-0 z-50">
     <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between gap-4">
-      <a href="#hero" data-testid="header-brand" className="flex items-center space-x-2 sm:space-x-3 min-w-0">
+      <a href="#hero" data-testid="header-brand" className="flex items-center space-x-2 sm:space-x-3 shrink-0">
         <span className="w-3 h-3 bg-[#D4A373] shrink-0" aria-hidden="true"></span>
-        <span className="font-manifesto tracking-tight text-[13px] sm:text-lg uppercase text-white truncate">Charmed Beauty 9 &amp; 18</span>
+        <span className="font-manifesto tracking-tight text-[13px] sm:text-base xl:text-lg uppercase text-white whitespace-nowrap">Charmed Beauty 9 &amp; 18</span>
       </a>
-      <nav aria-label="Section navigation" className="hidden lg:flex items-center space-x-7 text-xs font-mono uppercase tracking-widest text-[#B6B6C0]">
-        {NAV.map(([n, label, href]) => (
-          <a key={href} data-testid={`nav-${label.toLowerCase().replace(/\s+/g, "-")}`} href={href} className="hover:text-white transition-colors">
-            {n} / {label}
+      <nav aria-label="Section navigation" className="hidden lg:flex items-center justify-center flex-1 gap-4 xl:gap-7 text-[11px] xl:text-xs font-mono uppercase tracking-widest text-[#B6B6C0]">
+        {NAV.map(([, label, href]) => (
+          <a
+            key={href}
+            data-testid={`nav-${label.toLowerCase().replace(/\s+/g, "-")}`}
+            href={href}
+            className="whitespace-nowrap hover:text-white transition-colors"
+          >
+            {label}
           </a>
         ))}
       </nav>
@@ -222,7 +228,7 @@ const Header = () => (
     </div>
     <nav aria-label="Quick section navigation" className="lg:hidden border-t border-[#2E2E36] overflow-x-auto no-scrollbar">
       <div className="flex items-center gap-5 px-6 py-3 text-[11px] font-mono uppercase tracking-widest text-[#B6B6C0] w-max">
-        {NAV.map(([n, label, href]) => (
+        {NAV.map(([, label, href]) => (
           <a key={href} data-testid={`mobile-nav-${label.toLowerCase().replace(/\s+/g, "-")}`} href={href} className="whitespace-nowrap hover:text-white transition-colors">
             {label}
           </a>
@@ -653,6 +659,86 @@ const Menu = () => {
   );
 };
 
+/* ---------------- Gift Cards ---------------- */
+const GIFT_AMOUNTS = ["$50", "$95", "$165", "Any Amount"];
+
+const GiftCards = () => (
+  <section id="gift-cards" data-testid="gift-cards-section" aria-labelledby="gift-heading" className="py-24 px-6 border-b border-[#2E2E36] bg-[#000000]">
+    <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+      <Reveal className="lg:col-span-6">
+        <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#D4A373]">04 / Gift Cards</span>
+        <h2 id="gift-heading" className="font-manifesto text-4xl sm:text-6xl uppercase text-white mt-2 mb-6">
+          Give The<br />Chair Away
+        </h2>
+        <p className="text-base md:text-lg text-[#B6B6C0] font-light leading-relaxed max-w-xl mb-8">
+          A Charmed Beauty gift card is the present nobody re-gifts. Redeemable on anything on the menu — balayage,
+          a precision cut, keratin smoothing or a bridal updo. Perfect for birthdays, bridal parties, teacher
+          thank-yous and last-minute saves.
+        </p>
+
+        <ul className="flex flex-wrap gap-2 mb-8 list-none" data-testid="gift-amounts">
+          {GIFT_AMOUNTS.map((a) => (
+            <li key={a} className="px-4 py-2 border border-[#2E2E36] text-xs font-mono uppercase tracking-[0.15em] text-[#B6B6C0]">
+              {a}
+            </li>
+          ))}
+        </ul>
+
+        <div className="flex flex-wrap gap-3">
+          <a
+            data-testid="gift-text-btn"
+            href={`${PHONE_SMS}?body=Hi%20Charmed%20Beauty%20—%20I%27d%20like%20to%20buy%20a%20gift%20card.`}
+            className="px-8 py-4 bg-[#D4A373] text-black text-xs font-mono uppercase tracking-[0.2em] hover:bg-white transition-colors flex items-center gap-2"
+          >
+            <MessageSquare size={14} aria-hidden="true" /> Text To Buy
+          </a>
+          <a
+            data-testid="gift-call-btn"
+            href={PHONE_TEL}
+            className="px-8 py-4 border border-[#D4A373] text-[#D4A373] text-xs font-mono uppercase tracking-[0.2em] hover:bg-[#D4A373] hover:text-black transition-colors flex items-center gap-2"
+          >
+            <Phone size={14} aria-hidden="true" /> {PHONE_DISPLAY}
+          </a>
+          <a
+            data-testid="gift-email-btn"
+            href={`${EMAIL_HREF}?subject=Gift%20Card%20Request`}
+            className="px-8 py-4 border border-[#2E2E36] text-[#B6B6C0] text-xs font-mono uppercase tracking-[0.2em] hover:border-[#D4A373] hover:text-white transition-colors flex items-center gap-2"
+          >
+            <Mail size={14} aria-hidden="true" /> Email Us
+          </a>
+        </div>
+        <p className="mt-6 text-[11px] font-mono text-[#6E6E78] leading-relaxed max-w-md">
+          Gift cards are arranged directly with your stylist — text, call or email and we’ll have one ready, physical
+          or sent straight to their phone.
+        </p>
+      </Reveal>
+
+      <Reveal delay={150} className="lg:col-span-6">
+        <div data-testid="gift-card-visual" className="gift-card p-8 sm:p-10 border border-[#D4A373]/60 bg-[#0A0A0C] relative overflow-hidden">
+          <div className="flex items-start justify-between gap-6">
+            <div className="flex items-center gap-3">
+              <span className="w-3 h-3 bg-[#D4A373]" aria-hidden="true"></span>
+              <span className="text-[11px] font-mono uppercase tracking-[0.3em] text-[#D4A373]">Gift Card</span>
+            </div>
+            <Gift size={22} className="text-[#D4A373]" aria-hidden="true" />
+          </div>
+          <p className="font-manifesto uppercase text-4xl sm:text-5xl text-white leading-[0.9] mt-10">
+            Charmed<br />Beauty<br /><span className="text-[#D4A373]">9 &amp; 18</span>
+          </p>
+          <p className="font-serif-accent italic text-xl sm:text-2xl text-[#B6B6C0] mt-8">Couture color. Lasting precision.</p>
+          <div className="mt-10 pt-6 border-t border-[#2E2E36] flex items-end justify-between gap-4">
+            <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-[#6E6E78]">
+              Redeemable on any service
+              <br />1201 Hooper Ave · Toms River, NJ
+            </span>
+            <span className="font-mono text-2xl text-white">$ ___</span>
+          </div>
+        </div>
+      </Reveal>
+    </div>
+  </section>
+);
+
 /* ---------------- Reviews ---------------- */
 const Reviews = () => (
   <section id="reviews" data-testid="reviews-section" aria-labelledby="reviews-heading" className="relative py-24 px-6 border-b border-[#2E2E36] overflow-hidden bg-[#000000]">
@@ -660,7 +746,7 @@ const Reviews = () => (
       <Reveal>
         <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
-            <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#D4A373]">04 / Studio Verification</span>
+            <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#D4A373]">05 / Studio Verification</span>
             <h2 id="reviews-heading" className="font-manifesto text-4xl sm:text-5xl uppercase text-white mt-2">
               Verified Client Reviews
             </h2>
@@ -726,7 +812,7 @@ const Artists = () => (
         </div>
       </Reveal>
       <Reveal delay={150} className="lg:col-span-7 order-1 lg:order-2">
-        <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#D4A373]">05 / The Artists</span>
+        <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#D4A373]">06 / The Artists</span>
         <h2 id="artists-heading" className="font-manifesto text-4xl sm:text-6xl uppercase text-white mt-2 mb-6">
           Four Stylists.<br />One Standard.
         </h2>
@@ -761,7 +847,7 @@ const ServiceArea = () => (
   <section id="areas" data-testid="service-area-section" aria-labelledby="areas-heading" className="py-24 px-6 border-b border-[#2E2E36]">
     <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12">
       <Reveal className="lg:col-span-5">
-        <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#D4A373]">06 / Service Area</span>
+        <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#D4A373]">07 / Service Area</span>
         <h2 id="areas-heading" className="font-manifesto text-4xl sm:text-5xl uppercase text-white mt-2 mb-6">
           Serving Ocean County
         </h2>
@@ -800,7 +886,7 @@ const Location = () => (
     <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12">
       <div className="lg:col-span-5">
         <Reveal>
-          <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#D4A373]">07 / Studio Location</span>
+          <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#D4A373]">08 / Studio Location</span>
           <h2 id="location-heading" className="font-manifesto text-4xl sm:text-5xl uppercase text-white mt-2 mb-6">
             Toms River Studio
           </h2>
@@ -941,6 +1027,7 @@ const Footer = () => (
         <a href="#hero" className="hover:text-white transition-colors">Top</a>
         <a href="#work" className="hover:text-white transition-colors">The Work</a>
         <a href="#menu" className="hover:text-white transition-colors">Menu</a>
+        <a href="#gift-cards" className="hover:text-white transition-colors">Gift Cards</a>
         <a href="#reviews" className="hover:text-white transition-colors">Reviews</a>
         <a href="#artists" className="hover:text-white transition-colors">Artists</a>
         <a href="#location" className="hover:text-white transition-colors">Visit</a>
@@ -980,6 +1067,7 @@ function App() {
         <Gallery />
         <Interlude />
         <Menu />
+        <GiftCards />
         <Reviews />
         <Artists />
         <ServiceArea />
