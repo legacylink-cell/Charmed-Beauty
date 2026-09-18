@@ -22,7 +22,7 @@ const MENU = [
     blurb: "Shape engineered around bone structure and growth pattern.",
     items: [
       { name: "Women's Haircut & Blow-Dry", note: "Curling iron / flat iron extra", time: "30 min", price: "$50+" },
-      { name: "Women's Haircut — No Blow-Dry", note: "", time: "30 min", price: "Price varies" },
+      { name: "Women's Haircut, No Blow-Dry", note: "", time: "30 min", price: "Price varies" },
       { name: "Men's Haircut", note: "", time: "30 min", price: "$25" },
       { name: "Kids Haircut (9 yrs & younger)", note: "Blow-dry extra", time: "30 min", price: "$22+" },
       { name: "Bang Trim", note: "", time: "15 min", price: "$10+" },
@@ -59,7 +59,7 @@ const MENU = [
     blurb: "Repair and smoothing that holds through your routine.",
     items: [
       { name: "Keratin Treatment", note: "Months of glass-smooth, humidity-proof hair", time: "120 min", price: "$250" },
-      { name: "K18 Treatment — Add-On", note: "Molecular repair after lightening", time: "25 min", price: "$45" },
+      { name: "K18 Treatment, Add-On", note: "Molecular repair after lightening", time: "25 min", price: "$45" },
       { name: "Perms", note: "Haircut and blow-dry not included", time: "90 min", price: "Price varies" },
     ],
   },
@@ -67,7 +67,7 @@ const MENU = [
     id: "occasion",
     num: "D",
     title: "Occasion & Bridal",
-    blurb: "Event architecture for hair — weddings, proms, photoshoots.",
+    blurb: "Event architecture for hair. Weddings, proms, photoshoots.",
     items: [{ name: "Updo", note: "Bridal party & trial runs by request", time: "60 min", price: "$95+" }],
   },
 ];
@@ -113,7 +113,7 @@ const REVIEWS = [
   },
   {
     quote:
-      "Joanne is amazing! Always providing great feedback on ideas and how they'll look — suggestions when you just want a change and don't know what. Love her!!",
+      "Joanne is amazing! Always providing great feedback on ideas and how they'll look. Suggestions when you just want a change and don't know what. Love her!!",
     name: "Odette",
     tag: "Verified Client Review",
   },
@@ -122,12 +122,12 @@ const REVIEWS = [
 ];
 
 const HOURS = [
-  ["Monday", "9:00 AM — 5:00 PM"],
-  ["Tuesday", "9:00 AM — 5:00 PM"],
-  ["Wednesday", "9:30 AM — 7:00 PM"],
-  ["Thursday", "9:30 AM — 5:00 PM"],
-  ["Friday", "9:30 AM — 3:00 PM"],
-  ["Saturday", "9:00 AM — 3:00 PM"],
+  ["Monday", "9:00 AM to 5:00 PM"],
+  ["Tuesday", "9:00 AM to 5:00 PM"],
+  ["Wednesday", "9:30 AM to 7:00 PM"],
+  ["Thursday", "9:30 AM to 5:00 PM"],
+  ["Friday", "9:30 AM to 3:00 PM"],
+  ["Saturday", "9:00 AM to 3:00 PM"],
   ["Sunday", "Closed"],
 ];
 
@@ -284,7 +284,7 @@ const Hero = () => (
           <div className="md:col-span-7">
             <p className="text-lg md:text-xl text-[#B6B6C0] font-light leading-relaxed">
               A woman-owned hair studio on Hooper Ave serving Toms River, Brick, Beachwood, Bayville and the Jersey Shore.
-              Dimensional color, architectural cuts, keratin smoothing and bridal styling — designs nobody else in town
+              Dimensional color, architectural cuts, keratin smoothing and bridal styling. Designs nobody else in town
               does, built to last weeks.
             </p>
           </div>
@@ -310,7 +310,7 @@ const CHAPTERS = [
     n: "01",
     accent: true,
     title: "Zero Cookie-Cutter Color",
-    body: "Every head is an individual canvas. No formula cards, no rinse-and-repeat — each color plan is mapped to your tone, texture, and how you actually live.",
+    body: "Every head is an individual canvas. No formula cards, no rinse-and-repeat. Each color plan is mapped to your tone, texture, and how you actually live.",
   },
   {
     n: "02",
@@ -322,7 +322,7 @@ const CHAPTERS = [
     n: "03",
     accent: false,
     title: "Color That Outlasts Weeks",
-    body: "Meticulous prep, custom toning, and honest aftercare. Work that looks freshly done through your busiest routine — that is the standard, not the exception.",
+    body: "Meticulous prep, custom toning, and honest aftercare. Work that looks freshly done through your busiest routine. That is the standard, not the exception.",
   },
 ];
 
@@ -466,7 +466,7 @@ const Gallery = () => {
           <div className="mt-8 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8">
             <BookLink
               testId="work-book-btn"
-              label="Book the look — online booking"
+              label="Book the look, online booking"
               className="px-8 py-4 bg-[#D4A373] text-black text-xs font-mono uppercase tracking-[0.2em] hover:bg-white transition-colors w-fit"
             >
               Book Your Look
@@ -552,7 +552,7 @@ const Interlude = () => (
           <span className="text-xs font-mono uppercase tracking-[0.3em] text-[#B6B6C0]">The Charmed Standard</span>
         </div>
         <blockquote className="font-serif-accent italic text-3xl sm:text-5xl md:text-6xl text-white leading-[1.15] max-w-5xl">
-          “Designs nobody else in town does —<span className="text-[#D4A373]"> precision work that lasts weeks.”</span>
+          “Designs nobody else in town does.<span className="text-[#D4A373]"> precision work that lasts weeks.”</span>
         </blockquote>
         <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-10">
           <BookLink
@@ -562,7 +562,7 @@ const Interlude = () => (
           >
             Book Your Chair
           </BookLink>
-          <span className="text-xs font-mono text-[#B6B6C0] uppercase tracking-widest">The owner’s promise — in her own words</span>
+          <span className="text-xs font-mono text-[#B6B6C0] uppercase tracking-widest">The owner’s promise, in her own words</span>
         </div>
       </Reveal>
     </div>
@@ -574,7 +574,19 @@ const slug = (t) => t.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/-$/, ""
 
 const Menu = () => {
   const [openId, setOpenId] = useState(MENU[0].id);
+  const panelRef = useRef(null);
   const group = MENU.find((g) => g.id === openId);
+
+  const selectGroup = (id) => {
+    setOpenId(id);
+    requestAnimationFrame(() => {
+      const panel = panelRef.current;
+      if (!panel) return;
+      const header = document.querySelector("header");
+      const offset = (header?.offsetHeight ?? 0) + 16;
+      window.scrollTo({ top: panel.getBoundingClientRect().top + window.scrollY - offset, behavior: "smooth" });
+    });
+  };
 
   return (
     <section id="menu" data-testid="menu-section" aria-labelledby="menu-heading" className="py-24 px-6 border-b border-[#2E2E36]">
@@ -588,7 +600,7 @@ const Menu = () => {
               </h2>
             </div>
             <p className="text-sm text-[#B6B6C0] max-w-sm font-mono leading-relaxed">
-              Pick a category — its full price list opens right here. No endless scrolling.
+              Pick a category and its full price list opens right here. No endless scrolling.
             </p>
           </div>
         </Reveal>
@@ -606,7 +618,7 @@ const Menu = () => {
                   aria-selected={on}
                   aria-controls="menu-panel"
                   data-testid={`menu-tab-${g.id}`}
-                  onClick={() => setOpenId(g.id)}
+                  onClick={() => selectGroup(g.id)}
                   className={`menu-card text-left p-5 sm:p-6 border transition-colors ${
                     on ? "bg-[#D4A373] border-[#D4A373] text-black" : "border-[#2E2E36] text-white hover:border-[#D4A373]"
                   }`}
@@ -626,6 +638,7 @@ const Menu = () => {
         </Reveal>
 
         <div
+          ref={panelRef}
           id="menu-panel"
           key={openId}
           role="tabpanel"
@@ -692,7 +705,7 @@ const GiftCards = () => (
           Give The<br />Chair Away
         </h2>
         <p className="text-base md:text-lg text-[#B6B6C0] font-light leading-relaxed max-w-xl mb-8">
-          A Charmed Beauty gift card is the present nobody re-gifts. Redeemable on anything on the menu — balayage,
+          A Charmed Beauty gift card is the present nobody re-gifts. Redeemable on anything on the menu: balayage,
           a precision cut, keratin smoothing or a bridal updo. Perfect for birthdays, bridal parties, teacher
           thank-yous and last-minute saves.
         </p>
@@ -708,7 +721,7 @@ const GiftCards = () => (
         <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3">
           <a
             data-testid="gift-text-btn"
-            href={`${GIFT_SMS}?body=Hi%20Charmed%20Beauty%20—%20I%27d%20like%20to%20buy%20a%20gift%20card.`}
+            href={`${GIFT_SMS}?body=Hi%20Charmed%20Beauty%2C%20I%27d%20like%20to%20buy%20a%20gift%20card.`}
             className="w-full sm:w-auto px-8 py-4 bg-[#D4A373] text-black text-xs font-mono uppercase tracking-[0.2em] hover:bg-white transition-colors flex items-center justify-center gap-2"
           >
             <MessageSquare size={14} aria-hidden="true" /> Text To Buy
@@ -729,7 +742,7 @@ const GiftCards = () => (
           </a>
         </div>
         <p className="mt-6 text-[11px] font-mono text-[#6E6E78] leading-relaxed max-w-md">
-          Gift cards are arranged directly with Joanne — text, call or email and we’ll have one ready, physical or
+          Gift cards are arranged directly with Joanne. Text, call or email and we’ll have one ready, physical or
           sent straight to their phone.
         </p>
       </Reveal>
@@ -839,7 +852,7 @@ const Artists = () => (
         </h2>
         <p className="text-base md:text-lg text-[#B6B6C0] font-light leading-relaxed mb-8 max-w-xl">
           A woman-owned collective inside Sola Salon Studios. Every artist runs her own chair, her own craft, her own
-          clientele — call or text your stylist directly.
+          clientele. Call or text your stylist directly.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
           {TEAM_PHONES.map(([name, num, tel]) => (
@@ -873,7 +886,7 @@ const ServiceArea = () => (
           Serving Ocean County
         </h2>
         <p className="text-base text-[#B6B6C0] font-light leading-relaxed max-w-lg">
-          We sit on Hooper Ave in Toms River, minutes from Route 37 and the Garden State Parkway — an easy drive from Brick,
+          We sit on Hooper Ave in Toms River, minutes from Route 37 and the Garden State Parkway, an easy drive from Brick,
           Beachwood, Bayville, Lakewood, Island Heights, Seaside Heights, Point Pleasant, Jackson, Forked River and
           Manahawkin. Clients come from all over the Jersey Shore for colour and bridal work they can’t get closer to home.
         </p>
@@ -954,7 +967,7 @@ const Location = () => (
                 className="flex items-center space-x-2 text-xs font-mono uppercase text-white hover:text-[#D4A373] transition-colors"
               >
                 <Facebook size={14} className="text-[#D4A373]" aria-hidden="true" />
-                <span>Facebook — @charmedbeautynj</span>
+                <span>Facebook · @charmedbeautynj</span>
               </a>
             </div>
           </div>
@@ -1013,7 +1026,7 @@ const FinalCTA = () => (
           Reserve Your Slot Now
         </h2>
         <p className="text-[#B6B6C0] text-base mb-10 max-w-xl mx-auto">
-          Real-time availability for colour, cuts, treatments and occasion styling — book in under a minute.
+          Real-time availability for colour, cuts, treatments and occasion styling. Book in under a minute.
         </p>
         <div className="max-w-md mx-auto">
           <BookLink
