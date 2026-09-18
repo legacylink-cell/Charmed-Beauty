@@ -1,0 +1,31 @@
+{
+  "summary": "Frontend-only e2e test of the Charmed Beauty 9 & 18 static landing page at the preview URL. All 11 requested acceptance criteria were exercised via Playwright. 9/11 pass fully. Two defects found: (1) broken hero-team image /images/team.webp returns 404 (data-testid=team-photo), (2) mobile 390x844 has a 13px horizontal overflow (document.scrollWidth=403 > window.innerWidth=390) caused by the header 'BOOK ONLINE' button in the top bar. Everything else — hero, 21-tile gallery, 5 filters, lightbox (open/next/prev/Esc/body-scroll-restore), full menu (4 groups / 25 items / 25 book links), 7 booking CTAs (all correct URL + target=_blank + rel noopener), email/phone/sms links, absence of OWNER badge on stylist cards, 13 towns + areas book cell = 14, Google Map iframe, reviews (675 client / 5.0 with 54+ Google), SEO meta + JSON-LD HairSalon (valid JSON, address, openingHoursSpecification, 13 areaServed), all static assets (/robots.txt, /sitemap.xml, /og-image.jpg, /favicon.ico, /site.webmanifest) 200, skip-to-content link is first tabbable and visible on focus, all images have alt text, filter buttons are real <button>s with aria-pressed toggling — all verified passing. Zero console errors, zero failed network requests (aside from team.webp).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "Artists / team hero image", "issue": "/images/team.webp returns 404 — the <img data-testid='team-photo'> is broken. The asset is not present in /app/frontend/public/images/ (only gallery/work-01..21.webp exist). Either add the file or swap the src to an existing image.", "selector": "[data-testid='team-photo']", "priority": "HIGH"},
+      {"component": "Header on mobile", "issue": "At 390x844 the page overflows horizontally by 13px (document.scrollWidth=403 vs innerWidth=390). Root cause: header 'BOOK ONLINE' link (data-testid='header-book-btn') extends to right=403px. The header row (brand + CTA + padding) is too wide for a 390px viewport. Consider making the header CTA a compact icon/short label on <=390 or shrinking px on the brand pill.", "selector": "[data-testid='header-book-btn']", "priority": "HIGH"}
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Mobile", "issues": ["Header horizontal overflow causes the whole page to be horizontally scrollable, which fails the acceptance criterion 'no horizontal overflow'. The mobile-nav quick-strip and marquee themselves are correctly clipped/scrolled inside their parents; the overflow is purely the header row."]}
+    ]
+  },
+  "test_report_links": [],
+  "action_items": [
+    "Add /app/frontend/public/images/team.webp (the group/studio photo) OR change the team-photo <img> to point to an existing image so it stops 404'ing.",
+    "Fix mobile header overflow at 390px: make [data-testid='header-book-btn'] narrower on mobile (e.g. hide the text and show only 'BOOK', reduce px-5 -> px-3, or hide on <sm and rely on the floating-book-btn / mobile-nav 'BOOK' entry). Target: document.scrollWidth <= window.innerWidth at 390."
+  ],
+  "critical_code_review_comments": [
+    "/app/frontend/src/App.js is 957 lines — consider splitting the section components (Header/Hero/Gallery/Menu/Reviews/Artists/Location/Footer) and the data arrays (WORK, MENU, TOWNS, FILTERS, TEAM_PHONES) into separate files under /components and /constants for maintainability.",
+    "The word 'OWNER' still appears in body text via the manifesto copy 'The owner's promise — in her own words'. This is legitimate prose (not the badge on the stylist card the user asked to remove) so it is NOT a bug, just noting so the next agent does not treat it as one.",
+    "Consider adding a <link rel='preload' as='image'> for the hero/first gallery image and width/height attributes on <img> tags to improve LCP/CLS for Google PageSpeed."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a", "frontend": "82% (9/11 acceptance items fully pass; 2 items have defects)"},
+  "seed_data_creation": "None (static site).",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Backend was explicitly out of scope. Retest only needs to confirm (a) /images/team.webp returns 200 and the team-photo img renders (naturalWidth>0), and (b) at 390x844 document.scrollWidth <= window.innerWidth. All other flows are green and stable. Playwright selectors used all data-testids from the request and worked reliably.",
+  "rca of the issue": "1) team.webp 404 → asset was never added to /app/frontend/public/images/ during the recent gallery/OG work. Fix: place a real team photo there or reuse an existing gallery image. 2) Mobile overflow → the header CTA button has fixed horizontal padding (px-5 py-2) and full 'BOOK ONLINE' text, and combined with the brand pill left of it the row is ~403px wide, spilling 13px past the 390px viewport and creating a horizontal scrollbar for the entire document. Fix: reduce the CTA size or hide the header CTA text on <sm breakpoints (the site already has a floating-book-btn and a mobile-nav BOOK item, so the header CTA is redundant on mobile)."
+}

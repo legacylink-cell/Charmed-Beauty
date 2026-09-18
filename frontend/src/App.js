@@ -200,9 +200,9 @@ const NAV = [
 const Header = () => (
   <header className="border-b border-[#2E2E36] bg-[#000000]/95 backdrop-blur-md sticky top-0 z-50">
     <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between gap-4">
-      <a href="#hero" data-testid="header-brand" className="flex items-center space-x-3 shrink-0">
-        <span className="w-3 h-3 bg-[#D4A373]" aria-hidden="true"></span>
-        <span className="font-manifesto tracking-tight text-base sm:text-lg uppercase text-white">Charmed Beauty 9 &amp; 18</span>
+      <a href="#hero" data-testid="header-brand" className="flex items-center space-x-2 sm:space-x-3 min-w-0">
+        <span className="w-3 h-3 bg-[#D4A373] shrink-0" aria-hidden="true"></span>
+        <span className="font-manifesto tracking-tight text-[13px] sm:text-lg uppercase text-white truncate">Charmed Beauty 9 &amp; 18</span>
       </a>
       <nav aria-label="Section navigation" className="hidden lg:flex items-center space-x-7 text-xs font-mono uppercase tracking-widest text-[#B6B6C0]">
         {NAV.map(([n, label, href]) => (
@@ -214,9 +214,10 @@ const Header = () => (
       <BookLink
         testId="header-book-btn"
         label="Book an appointment online"
-        className="px-5 py-2 bg-[#D4A373] text-black text-xs font-bold uppercase tracking-wider hover:bg-white transition-colors shrink-0"
+        className="px-3 sm:px-5 py-2 bg-[#D4A373] text-black text-[11px] sm:text-xs font-bold uppercase tracking-wider hover:bg-white transition-colors shrink-0"
       >
-        Book Online
+        <span className="sm:hidden">Book</span>
+        <span className="hidden sm:inline">Book Online</span>
       </BookLink>
     </div>
     <nav aria-label="Quick section navigation" className="lg:hidden border-t border-[#2E2E36] overflow-x-auto no-scrollbar">
@@ -544,76 +545,113 @@ const Interlude = () => (
   </section>
 );
 
-/* ---------------- Full Menu ---------------- */
-const Menu = () => (
-  <section id="menu" data-testid="menu-section" aria-labelledby="menu-heading" className="py-24 px-6 border-b border-[#2E2E36]">
-    <div className="max-w-7xl mx-auto">
-      <Reveal>
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-          <div>
-            <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#D4A373]">03 / Full Service Menu</span>
-            <h2 id="menu-heading" className="font-manifesto text-4xl sm:text-6xl uppercase text-white mt-2">
-              Services &amp; Pricing
-            </h2>
-          </div>
-          <p className="text-sm text-[#B6B6C0] max-w-sm font-mono leading-relaxed">
-            Every service we offer, start to finish. Reserve any of them online in seconds.
-          </p>
-        </div>
-      </Reveal>
+/* ---------------- Full Menu: category cards + revealed panel ---------------- */
+const slug = (t) => t.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/-$/, "");
 
-      <div className="space-y-16">
-        {MENU.map((group) => (
-          <div key={group.id} data-testid={`menu-group-${group.id}`}>
-            <Reveal>
-              <div className="flex items-baseline gap-4 border-b border-[#D4A373]/40 pb-4 mb-2">
-                <span className="font-manifesto text-3xl sm:text-4xl uppercase text-[#D4A373] leading-none">{group.num}</span>
-                <div>
-                  <h3 className="font-manifesto text-2xl sm:text-3xl uppercase text-white leading-none">{group.title}</h3>
-                  <p className="text-xs font-mono text-[#B6B6C0] mt-2">{group.blurb}</p>
-                </div>
-              </div>
-            </Reveal>
-            <ul className="divide-y divide-[#2E2E36] list-none">
-              {group.items.map((s) => (
-                <li key={s.name}>
-                  <div
-                    data-testid={`menu-item-${s.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/-$/, "")}`}
-                    className="service-row py-6 px-2 md:px-4 grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-6 md:items-center"
-                  >
-                    <div className="md:col-span-6">
-                      <h4 className="text-lg md:text-xl font-bold uppercase text-white tracking-wide">{s.name}</h4>
-                      {s.note && <p className="text-xs font-mono text-[#B6B6C0] mt-1">{s.note}</p>}
-                    </div>
-                    <div className="hidden md:block md:col-span-2 text-xs font-mono uppercase text-[#B6B6C0]">{s.time}</div>
-                    <div className="md:col-span-4 flex items-center justify-between md:justify-end gap-4 md:gap-6">
-                      <span className="md:hidden text-xs font-mono uppercase text-[#B6B6C0]">{s.time}</span>
-                      <span className="service-price font-mono text-lg md:text-xl text-white font-semibold whitespace-nowrap">{s.price}</span>
-                      <BookLink
-                        testId={`menu-book-${s.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/-$/, "")}`}
-                        label={`Book ${s.name}`}
-                        className="px-4 py-2 border border-[#D4A373] text-[#D4A373] text-xs font-mono uppercase hover:bg-[#D4A373] hover:text-black transition-colors whitespace-nowrap"
-                      >
-                        Book
-                      </BookLink>
-                    </div>
+const Menu = () => {
+  const [openId, setOpenId] = useState(MENU[0].id);
+  const group = MENU.find((g) => g.id === openId);
+
+  return (
+    <section id="menu" data-testid="menu-section" aria-labelledby="menu-heading" className="py-24 px-6 border-b border-[#2E2E36]">
+      <div className="max-w-7xl mx-auto">
+        <Reveal>
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
+            <div>
+              <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#D4A373]">03 / Full Service Menu</span>
+              <h2 id="menu-heading" className="font-manifesto text-4xl sm:text-6xl uppercase text-white mt-2">
+                Services &amp; Pricing
+              </h2>
+            </div>
+            <p className="text-sm text-[#B6B6C0] max-w-sm font-mono leading-relaxed">
+              Pick a category — its full price list opens right here. No endless scrolling.
+            </p>
+          </div>
+        </Reveal>
+
+        <Reveal delay={80}>
+          <div role="tablist" aria-label="Service categories" className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            {MENU.map((g) => {
+              const on = g.id === openId;
+              return (
+                <button
+                  key={g.id}
+                  type="button"
+                  role="tab"
+                  id={`menu-tab-${g.id}`}
+                  aria-selected={on}
+                  aria-controls="menu-panel"
+                  data-testid={`menu-tab-${g.id}`}
+                  onClick={() => setOpenId(g.id)}
+                  className={`menu-card text-left p-5 sm:p-6 border transition-colors ${
+                    on ? "bg-[#D4A373] border-[#D4A373] text-black" : "border-[#2E2E36] text-white hover:border-[#D4A373]"
+                  }`}
+                >
+                  <span className={`font-manifesto text-2xl sm:text-3xl leading-none ${on ? "text-black" : "text-[#D4A373]"}`}>{g.num}</span>
+                  <span className="block font-manifesto uppercase text-base sm:text-xl leading-tight mt-3">{g.title}</span>
+                  <span className={`block text-[11px] font-mono uppercase tracking-widest mt-3 ${on ? "text-black/70" : "text-[#B6B6C0]"}`}>
+                    {g.items.length} service{g.items.length > 1 ? "s" : ""}
+                  </span>
+                  <span className={`block text-[11px] font-mono mt-2 leading-relaxed ${on ? "text-black/80" : "text-[#6E6E78]"}`}>
+                    {g.blurb}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </Reveal>
+
+        <div
+          id="menu-panel"
+          key={openId}
+          role="tabpanel"
+          aria-labelledby={`menu-tab-${openId}`}
+          data-testid={`menu-group-${openId}`}
+          className="menu-panel mt-10 border border-[#2E2E36]"
+        >
+          <div className="flex items-baseline gap-4 px-4 sm:px-6 py-5 border-b border-[#2E2E36] bg-[#15151A]">
+            <span className="font-manifesto text-2xl uppercase text-[#D4A373] leading-none">{group.num}</span>
+            <h3 className="font-manifesto text-xl sm:text-2xl uppercase text-white leading-none">{group.title}</h3>
+          </div>
+          <ul className="divide-y divide-[#2E2E36] list-none">
+            {group.items.map((s) => (
+              <li key={s.name}>
+                <div
+                  data-testid={`menu-item-${slug(s.name)}`}
+                  className="service-row py-5 px-4 sm:px-6 grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-6 md:items-center"
+                >
+                  <div className="md:col-span-6">
+                    <h4 className="text-lg md:text-xl font-bold uppercase text-white tracking-wide">{s.name}</h4>
+                    {s.note && <p className="text-xs font-mono text-[#B6B6C0] mt-1">{s.note}</p>}
                   </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
+                  <div className="hidden md:block md:col-span-2 text-xs font-mono uppercase text-[#B6B6C0]">{s.time}</div>
+                  <div className="md:col-span-4 flex items-center justify-between md:justify-end gap-4 md:gap-6">
+                    <span className="md:hidden text-xs font-mono uppercase text-[#B6B6C0]">{s.time}</span>
+                    <span className="service-price font-mono text-lg md:text-xl text-white font-semibold whitespace-nowrap">{s.price}</span>
+                    <BookLink
+                      testId={`menu-book-${slug(s.name)}`}
+                      label={`Book ${s.name}`}
+                      className="px-4 py-2 border border-[#D4A373] text-[#D4A373] text-xs font-mono uppercase hover:bg-[#D4A373] hover:text-black transition-colors whitespace-nowrap"
+                    >
+                      Book
+                    </BookLink>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
 
-      <Reveal delay={150}>
-        <p className="mt-10 text-xs font-mono text-[#B6B6C0] leading-relaxed max-w-2xl">
-          Prices start at the listed rate. Long, dense or previously-coloured hair, added toners and root work are quoted at
-          the chair. Not sure what you need? Call or text and we’ll map it out with you.
-        </p>
-      </Reveal>
-    </div>
-  </section>
-);
+        <Reveal delay={150}>
+          <p className="mt-8 text-xs font-mono text-[#B6B6C0] leading-relaxed max-w-2xl">
+            Prices start at the listed rate. Long, dense or previously-coloured hair, added toners and root work are quoted at
+            the chair. Not sure what you need? Call or text and we’ll map it out with you.
+          </p>
+        </Reveal>
+      </div>
+    </section>
+  );
+};
 
 /* ---------------- Reviews ---------------- */
 const Reviews = () => (

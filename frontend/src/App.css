@@ -196,6 +196,7 @@ button:focus-visible {
   }
   .hero-in,
   .marquee-track,
+  .menu-panel,
   .float-book,
   .frame-img,
   .lightbox {
@@ -213,6 +214,21 @@ button:focus-visible {
   .review-card {
     transition: none;
   }
+}
+
+/* ---- Menu category panel reveal ---- */
+@keyframes panelIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.menu-panel {
+  animation: panelIn 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.menu-card {
+  transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.menu-card:hover {
+  transform: translateY(-3px);
 }
 
 /* ---- Utilities ---- */
